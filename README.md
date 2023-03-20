@@ -19,5 +19,3 @@ If you want to set up the pre-commit hooks suggested for this project, run
 ```
 cp pre-commit.sh .git/hooks/pre-commit
 ```
-
-add some changes
