@@ -1,0 +1,26 @@
+{
+  "name": "vocitrainer",
+  "version": "1.0.0",
+  "description": "Vocitrainer is a chatbot-like app to study vocabulary.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pretty-check": "prettier --check .",
+    "prettier": "prettier -w ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taskbase/vocitrainer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/taskbase/vocitrainer/issues"
+  },
+  "homepage": "https://github.com/taskbase/vocitrainer#readme",
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "prettier": "^2.8.5",
+    "pretty-quick": "^3.1.3"
+  }
+}
