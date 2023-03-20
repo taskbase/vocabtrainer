@@ -7,6 +7,7 @@ Vocitrainer is a chatbot-like app to study vocabulary.
 To get your dev environment up and running, after cloning the repo:
 
 ```
+npm ci
 cd client
 npm ci
 npm start

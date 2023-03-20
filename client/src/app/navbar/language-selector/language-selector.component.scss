@@ -1,0 +1,10 @@
+.wrapper {
+  display: flex;
+  .lang {
+    padding: 50px;
+
+    &.selected {
+      border-bottom: 5px solid black;
+    }
+  }
+}
