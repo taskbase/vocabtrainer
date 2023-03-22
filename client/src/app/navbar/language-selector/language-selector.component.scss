@@ -1,7 +1,9 @@
 @import "src/styles/variables";
 
 .wrapper {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
 
   .language-selector-button {
     border-bottom: 2px solid transparent;
