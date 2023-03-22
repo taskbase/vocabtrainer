@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconCaretRightComponent } from './icon-caret-right/icon-caret-right.component';
-import { ChapterPlayerIconComponent } from './tb-icon/tb-icon.component';
+import { TbIconComponent } from './tb-icon/tb-icon.component';
 import { IconRightArrowComponent } from './icon-right-arrow/icon-right-arrow.component';
 import { IconQuestionMarkComponent } from './icon-question-mark/icon-question-mark.component';
 import { IconHamburgerComponent } from './icon-hamburger/icon-hamburger.component';
@@ -13,7 +13,7 @@ import { IconProgressCircleComponent } from './icon-progress-circle/icon-progres
 @NgModule({
   declarations: [
     IconCaretRightComponent,
-    ChapterPlayerIconComponent,
+    TbIconComponent,
     IconRightArrowComponent,
     IconQuestionMarkComponent,
     IconHamburgerComponent,
@@ -23,10 +23,6 @@ import { IconProgressCircleComponent } from './icon-progress-circle/icon-progres
     IconProgressCircleComponent,
   ],
   imports: [CommonModule],
-  exports: [
-    ChapterPlayerIconComponent,
-    IconProgressCircleComponent,
-    IconHexagonComponent,
-  ],
+  exports: [TbIconComponent, IconProgressCircleComponent, IconHexagonComponent],
 })
-export class ChapterPlayerIconModule {}
+export class TbIconModule {}

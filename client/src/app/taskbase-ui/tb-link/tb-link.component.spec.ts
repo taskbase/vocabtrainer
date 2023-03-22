@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChapterPlayerLinkComponent } from './tb-link.component';
+import { TbLinkComponent } from './tb-link.component';
 
-describe('ChapterPlayerLinkComponent', () => {
-  let component: ChapterPlayerLinkComponent;
-  let fixture: ComponentFixture<ChapterPlayerLinkComponent>;
+describe('TbLinkComponent', () => {
+  let component: TbLinkComponent;
+  let fixture: ComponentFixture<TbLinkComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ChapterPlayerLinkComponent],
+      declarations: [TbLinkComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ChapterPlayerLinkComponent);
+    fixture = TestBed.createComponent(TbLinkComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

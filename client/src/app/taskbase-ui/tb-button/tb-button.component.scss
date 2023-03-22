@@ -1,5 +1,5 @@
 @import "variables";
-@import "../../tb.vars";
+@import "../tb.vars";
 
 @mixin spaced-children($space) {
   .child + .child {

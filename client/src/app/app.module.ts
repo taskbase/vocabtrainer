@@ -8,6 +8,7 @@ import { LanguageSelectorComponent } from './navbar/language-selector/language-s
 import { LanguageEnComponent } from './navbar/language-selector/language-en/language-en.component';
 import { LanguageDeComponent } from './navbar/language-selector/language-de/language-de.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { TbUiModule } from './taskbase-ui/tb-ui.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,7 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
     LanguageDeComponent,
     LandingPageComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [BrowserModule, AppRoutingModule, TbUiModule],
   providers: [],
   bootstrap: [AppComponent],
 })

@@ -1,10 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  getScssVariable,
-  ScssVariable,
-} from '../../../scss-variables.generated';
 
-export interface ChapterPlayerLink {
+export interface TbLink {
   text: string;
   routerLink: string[];
 }
@@ -14,11 +10,11 @@ export interface ChapterPlayerLink {
   templateUrl: './tb-link-list-item.component.html',
   styleUrls: ['./tb-link-list-item.component.scss'],
 })
-export class ChapterPlayerLinkListItemComponent implements OnInit {
+export class TbLinkListItemComponent implements OnInit {
   @Input()
-  link: ChapterPlayerLink;
+  link: TbLink = { text: '', routerLink: [] };
 
-  color = getScssVariable(ScssVariable.COLOR_PRIMARY);
+  color = 'black';
 
   constructor() {}
 

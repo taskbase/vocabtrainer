@@ -7,7 +7,7 @@ type RouterLink = any[] | string | null | undefined;
   templateUrl: './tb-link.component.html',
   styleUrls: ['./tb-link.component.scss'],
 })
-export class ChapterPlayerLinkComponent implements OnInit {
+export class TbLinkComponent implements OnInit {
   @Input() link: RouterLink;
 
   constructor() {}

@@ -1,26 +1,24 @@
 import { Directive, HostBinding, Input, OnInit } from '@angular/core';
-import {
-  getScssVariable,
-  ScssVariable,
-} from '../../../scss-variables.generated';
 
-export type ChapterPlayerTextAlign = 'left' | 'center';
-export type ChapterPlayerTypographyColor = 'primary' | 'default' | 'white';
+export type TbTypographyColor = 'primary' | 'default' | 'white';
 
 @Directive()
-export class ChapterPlayerTypographyBaseDirective implements OnInit {
-  @Input() color: ChapterPlayerTypographyColor = 'default';
+export class TbTypographyBaseDirective implements OnInit {
+  @Input() color: TbTypographyColor = 'default';
 
   @HostBinding('style.color')
   get hostColor(): string | null {
     if (this.color === 'primary') {
-      return getScssVariable(ScssVariable.COLOR_PRIMARY);
+      return '#5d62c7';
     } else if (this.color === 'white') {
       return 'white';
     } else {
       return null;
     }
   }
+
+  @HostBinding('style.font-family')
+  fontFamily: string = `"Inter", sans-serif`;
 
   @HostBinding('style.text-align')
   @Input()

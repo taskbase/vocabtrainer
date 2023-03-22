@@ -5,8 +5,8 @@ import { Component, Input, OnInit } from '@angular/core';
   templateUrl: './tb-mailto.component.html',
   styleUrls: ['./tb-mailto.component.scss'],
 })
-export class ChapterPlayerMailtoComponent implements OnInit {
-  @Input() mail: string;
+export class TbMailtoComponent implements OnInit {
+  @Input() mail: string = '';
 
   constructor() {}
 

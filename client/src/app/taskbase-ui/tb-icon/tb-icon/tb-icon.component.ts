@@ -5,7 +5,7 @@ import {
   OnInit,
 } from '@angular/core';
 
-export type ChapterPlayerIcon =
+export type TbIcon =
   | 'caret-right'
   | 'right-arrow'
   | 'left-arrow'
@@ -20,8 +20,8 @@ export type ChapterPlayerIcon =
   styleUrls: ['./tb-icon.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChapterPlayerIconComponent implements OnInit {
-  @Input() icon: ChapterPlayerIcon | null = null;
+export class TbIconComponent implements OnInit {
+  @Input() icon: TbIcon | null = null;
   @Input() color: string = 'currentColor';
   @Input() scale: number = 1;
 

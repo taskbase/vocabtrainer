@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './tb-highlight.component.html',
   styleUrls: ['./tb-highlight.component.scss'],
 })
-export class ChapterPlayerHighlightComponent implements OnInit {
+export class TbHighlightComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}

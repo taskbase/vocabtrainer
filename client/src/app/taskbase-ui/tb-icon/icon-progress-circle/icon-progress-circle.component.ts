@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./icon-progress-circle.component.scss'],
 })
 export class IconProgressCircleComponent implements OnInit {
-  @Input() progress: number; // between 0 and 1
+  @Input() progress: number = 0; // between 0 and 1
   get percentageString() {
     return `calc(${this.progress * 31.4}px ) 31.4`;
   }
