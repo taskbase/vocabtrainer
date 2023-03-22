@@ -1,3 +1,10 @@
+@import "variables";
+
+:host {
+  height: $navbar-height;
+  display: block;
+}
+
 .navbar-wrapper {
   display: flex;
   justify-content: space-between;

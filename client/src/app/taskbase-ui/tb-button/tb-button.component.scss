@@ -1,6 +1,10 @@
 @import "variables";
 @import "../tb.vars";
 
+:host {
+  font-family: "Inter", sans-serif;
+}
+
 @mixin spaced-children($space) {
   .child + .child {
     margin-left: $space;
@@ -10,6 +14,7 @@
 @mixin size-config($height, $padding, $font-size, $gap) {
   height: $height;
   width: 100%; // on small screens
+  min-width: 160px;
   @media (min-width: $tb-breakpoint-sm) {
     width: auto;
   }
