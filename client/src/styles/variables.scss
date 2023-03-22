@@ -1,4 +1,14 @@
+// There is some duplication in this file and in the `tb.vars.scss` file.
+// The idea is to resolve this when `taskbase-ui` is extracted into its own library.
+
 $color-primary: #5d62c7;
 $color-white: #fff;
 
 $navbar-height: 100px;
+
+$breakpoint-xs: 0;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1400px;

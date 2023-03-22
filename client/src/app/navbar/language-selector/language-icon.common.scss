@@ -1,0 +1,9 @@
+@import "variables";
+
+.language-icon {
+  height: 32px;
+
+  @media (min-width: $breakpoint-md) {
+    height: 20px;
+  }
+}

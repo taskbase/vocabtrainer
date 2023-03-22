@@ -10,3 +10,10 @@
   justify-content: space-between;
   padding-top: 32px;
 }
+
+.taskbase-logo {
+  height: 16px;
+  @media (min-width: $breakpoint-md) {
+    height: 20px;
+  }
+}
