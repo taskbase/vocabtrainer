@@ -3,6 +3,10 @@
 @import "./reset";
 @import "./fonts.scss";
 
+* {
+  box-sizing: border-box;
+}
+
 .app-unstyled-button {
   background: none;
   color: inherit;
