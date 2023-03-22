@@ -1,10 +1,13 @@
 <div class="wrapper">
   <button
     *ngFor="let lang of languages"
-    class="lang"
+    class="app-unstyled-button language-selector-button"
     [ngClass]="{ selected: (selectedLang | async) === lang }"
     (click)="selectLang(lang)"
   >
-    {{ lang }}
+    <ng-container [ngSwitch]="lang">
+      <app-language-en *ngSwitchCase="languageEnum.EN"></app-language-en>
+      <app-language-de *ngSwitchCase="languageEnum.DE"></app-language-de>
+    </ng-container>
   </button>
 </div>

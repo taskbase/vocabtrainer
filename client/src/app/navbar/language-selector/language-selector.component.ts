@@ -9,6 +9,7 @@ import { Language, LanguageService } from '../../language.service';
 export class LanguageSelectorComponent {
   selectedLang = this.languageService.language;
   languages = [Language.EN, Language.DE];
+  languageEnum = Language;
 
   constructor(private languageService: LanguageService) {}
 

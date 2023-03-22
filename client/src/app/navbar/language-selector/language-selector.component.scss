@@ -1,10 +1,13 @@
+@import "src/styles/variables";
+
 .wrapper {
   display: flex;
-  .lang {
-    padding: 50px;
+
+  .language-selector-button {
+    border-bottom: 2px solid transparent;
 
     &.selected {
-      border-bottom: 5px solid black;
+      border-bottom-color: $color-primary;
     }
   }
 }
