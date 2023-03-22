@@ -1,0 +1,19 @@
+@import "variables";
+
+:host {
+  height: $navbar-height;
+  display: block;
+}
+
+.navbar-wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 32px;
+}
+
+.taskbase-logo {
+  height: 16px;
+  @media (min-width: $breakpoint-md) {
+    height: 20px;
+  }
+}

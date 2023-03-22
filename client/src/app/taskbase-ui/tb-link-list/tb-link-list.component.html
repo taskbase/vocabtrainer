@@ -1,0 +1,9 @@
+<div class="list-wrapper">
+  <div *ngFor="let link of links; trackBy: trackByFn">
+    <a [routerLink]="link.routerLink">
+      <tb-link-list-item>
+        {{ link.text }}
+      </tb-link-list-item>
+    </a>
+  </div>
+</div>

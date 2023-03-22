@@ -1,0 +1,16 @@
+@import "variables";
+
+:host {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: $color-white;
+  padding: 16px;
+
+  .link-text {
+    font-size: 20px;
+    line-height: 180%;
+    color: $color-primary;
+    margin-right: 15px;
+  }
+}

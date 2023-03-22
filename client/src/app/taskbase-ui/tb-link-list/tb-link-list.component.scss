@@ -1,0 +1,5 @@
+.list-wrapper {
+  > :not(:last-child) {
+    margin-bottom: 8px;
+  }
+}
