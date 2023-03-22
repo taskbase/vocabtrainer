@@ -1,0 +1,5 @@
+@import "../../chapter-player.vars";
+
+:host {
+  box-shadow: inset 0 -0.45em 0 $chapter-player-color-secondary;
+}

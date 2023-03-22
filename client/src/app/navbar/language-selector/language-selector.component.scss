@@ -5,6 +5,7 @@
 
   .language-selector-button {
     border-bottom: 2px solid transparent;
+    padding-bottom: 12px;
 
     &.selected {
       border-bottom-color: $color-primary;

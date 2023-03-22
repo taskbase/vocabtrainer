@@ -1,0 +1,31 @@
+<button
+  class="wrapper"
+  [disabled]="disabled"
+  [ngClass]="[
+    type,
+    size,
+    iconPosition,
+    icon != null ? 'icon-present' : 'no-icon',
+    invert ? 'invert' : ''
+  ]"
+>
+  <ng-container
+    *ngIf="icon != null && (iconPosition === 'left' || iconPosition === 'fab')"
+  >
+    <ng-container *ngTemplateOutlet="iconTemplate"></ng-container>
+  </ng-container>
+  <span class="text-label child" *ngIf="iconPosition !== 'fab'">
+    <ng-content></ng-content>
+  </span>
+  <ng-container *ngIf="icon != null && iconPosition === 'right'">
+    <ng-container *ngTemplateOutlet="iconTemplate"></ng-container>
+  </ng-container>
+</button>
+<ng-template #iconTemplate>
+  <span class="icon child">
+    <app-chapter-player-icon
+      [icon]="icon"
+      [scale]="buttonProps.iconScale"
+    ></app-chapter-player-icon>
+  </span>
+</ng-template>

@@ -1,0 +1,18 @@
+@import "../../../chapter-player.vars";
+
+:host {
+  display: block;
+
+  margin-bottom: 16px;
+
+  font-weight: 600;
+
+  font-size: 32px;
+  line-height: 160%;
+  @media (min-width: $chapter-player-breakpoint-xl) {
+    font-size: 48px;
+    line-height: 140%;
+  }
+
+  color: #000000;
+}

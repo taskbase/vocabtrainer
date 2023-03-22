@@ -7,6 +7,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { LanguageSelectorComponent } from './navbar/language-selector/language-selector.component';
 import { LanguageEnComponent } from './navbar/language-selector/language-en/language-en.component';
 import { LanguageDeComponent } from './navbar/language-selector/language-de/language-de.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { LanguageDeComponent } from './navbar/language-selector/language-de/lang
     LanguageSelectorComponent,
     LanguageEnComponent,
     LanguageDeComponent,
+    LandingPageComponent,
   ],
   imports: [BrowserModule, AppRoutingModule],
   providers: [],

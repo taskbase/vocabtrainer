@@ -1,0 +1,169 @@
+@import "variables";
+@import "../../chapter-player.vars";
+
+@mixin spaced-children($space) {
+  .child + .child {
+    margin-left: $space;
+  }
+}
+
+@mixin size-config($height, $padding, $font-size, $gap) {
+  height: $height;
+  width: 100%; // on small screens
+  @media (min-width: $chapter-player-breakpoint-sm) {
+    width: auto;
+  }
+  &.fab {
+    width: $height;
+  }
+  border-radius: $height * 0.5;
+  padding-left: $padding;
+  padding-right: $padding;
+  .text-label {
+    font-weight: 600;
+    font-size: $font-size;
+    line-height: 160%;
+  }
+  @include spaced-children($gap);
+}
+
+:host {
+  .wrapper {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    // remove default button styles
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+
+    // transition
+    transition: all 0.1s ease-in-out;
+
+    &.large {
+      @include size-config(
+        $height: 72px,
+        $padding: 24px,
+        $font-size: 18px,
+        $gap: 16px
+      );
+    }
+
+    &.medium {
+      @include size-config(
+        $height: 64px,
+        $padding: 20px,
+        $font-size: 16px,
+        $gap: 16px
+      );
+    }
+
+    &.small {
+      @include size-config(
+        $height: 56px,
+        $padding: 16px,
+        $font-size: 14px,
+        $gap: 12px
+      );
+    }
+
+    &.tiny {
+      @include size-config(
+        $height: 40px,
+        $padding: 12px,
+        $font-size: 14px,
+        $gap: 8px
+      );
+    }
+
+    &.filled {
+      background: $chapter-player-color-primary-400;
+      color: white;
+
+      &:hover {
+        background: $chapter-player-color-primary-600;
+        color: $chapter-player-color-secondary-100;
+      }
+
+      // the specs are a bit different, since they have "pressed" and "focus",
+      // but after fiddling around with it for hours, this will have to do.
+      &:focus {
+        background: $chapter-player-color-primary-900;
+        color: white;
+      }
+
+      &:disabled {
+        background: $chapter-player-color-primary-200;
+        color: white;
+      }
+    }
+
+    &.outline {
+      background-color: transparent;
+      color: $chapter-player-color-primary;
+      border: 2px solid $chapter-player-color-primary;
+
+      // TODO #3257: add styles for the inverted ones
+
+      &.invert {
+        background-color: $chapter-player-color-primary;
+        color: white;
+        border: 2px solid white;
+      }
+
+      &:hover {
+        color: $chapter-player-color-primary-600;
+        border-color: $chapter-player-color-primary-600;
+
+        &.invert {
+          color: $chapter-player-color-secondary;
+          border: 2px solid $chapter-player-color-secondary;
+        }
+      }
+
+      &:focus {
+        color: $chapter-player-color-primary-900;
+        border-color: $chapter-player-color-primary-900;
+
+        &.invert {
+          color: $chapter-player-color-secondary;
+          border: 2px solid $chapter-player-color-secondary;
+        }
+      }
+
+      &:disabled {
+        color: $chapter-player-color-primary-200;
+        border-color: $chapter-player-color-primary-200;
+        cursor: default;
+      }
+    }
+
+    &.ghost {
+      background-color: transparent;
+      color: $chapter-player-color-primary;
+
+      &:hover {
+        color: $chapter-player-color-primary-600;
+      }
+
+      &:focus {
+        color: $chapter-player-color-primary-900;
+      }
+
+      &:disabled {
+        color: $chapter-player-color-primary-200;
+        cursor: default;
+      }
+    }
+
+    &.fab {
+      border-radius: 50%;
+    }
+  }
+}
