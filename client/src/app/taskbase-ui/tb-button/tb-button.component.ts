@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ChapterPlayerIcon } from '../tb-icon/chapter-player-icon/chapter-player-icon.component';
+import { ChapterPlayerIcon } from '../tb-icon/tb-icon/tb-icon.component';
 
 interface ButtonProperties {
   iconScale: number;
@@ -17,9 +17,9 @@ export type ChapterPlayerButtonSize = 'large' | 'medium' | 'small' | 'tiny';
 export type ChapterPlayerIconPosition = 'left' | 'right' | 'fab'; // fab is an icon only button
 
 @Component({
-  selector: 'app-chapter-player-button',
-  templateUrl: './chapter-player-button.component.html',
-  styleUrls: ['./chapter-player-button.component.scss'],
+  selector: 'tb-button',
+  templateUrl: './tb-button.component.html',
+  styleUrls: ['./tb-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChapterPlayerButtonComponent implements OnInit {

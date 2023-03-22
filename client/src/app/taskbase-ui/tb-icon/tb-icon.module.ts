@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconCaretRightComponent } from './icon-caret-right/icon-caret-right.component';
-import { ChapterPlayerIconComponent } from './chapter-player-icon/chapter-player-icon.component';
+import { ChapterPlayerIconComponent } from './tb-icon/tb-icon.component';
 import { IconRightArrowComponent } from './icon-right-arrow/icon-right-arrow.component';
 import { IconQuestionMarkComponent } from './icon-question-mark/icon-question-mark.component';
 import { IconHamburgerComponent } from './icon-hamburger/icon-hamburger.component';

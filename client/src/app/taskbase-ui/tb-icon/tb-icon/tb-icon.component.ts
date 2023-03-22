@@ -15,9 +15,9 @@ export type ChapterPlayerIcon =
   | 'file-download';
 
 @Component({
-  selector: 'app-chapter-player-icon',
-  templateUrl: './chapter-player-icon.component.html',
-  styleUrls: ['./chapter-player-icon.component.scss'],
+  selector: 'tb-icon',
+  templateUrl: './tb-icon.component.html',
+  styleUrls: ['./tb-icon.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChapterPlayerIconComponent implements OnInit {

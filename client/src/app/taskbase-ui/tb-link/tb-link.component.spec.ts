@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChapterPlayerLinkComponent } from './chapter-player-link.component';
+import { ChapterPlayerLinkComponent } from './tb-link.component';
 
 describe('ChapterPlayerLinkComponent', () => {
   let component: ChapterPlayerLinkComponent;

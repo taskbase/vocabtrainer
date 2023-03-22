@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ChapterPlayerIconBaseDirective } from '../chapter-player-icon-base.directive';
+import { ChapterPlayerIconBaseDirective } from '../tb-icon-base.directive';
 
 @Component({
   selector: 'app-icon-file-download',

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { ChapterPlayerTypographyBaseDirective } from '../chapter-player-typography-base.directive';
+import { ChapterPlayerTypographyBaseDirective } from '../tb-typography-base.directive';
 
 @Component({
-  selector: 'app-chapter-player-text3',
-  templateUrl: './chapter-player-text3.component.html',
-  styleUrls: ['./chapter-player-text3.component.scss'],
+  selector: 'tb-text3',
+  templateUrl: './tb-text3.component.html',
+  styleUrls: ['./tb-text3.component.scss'],
 })
 export class ChapterPlayerText3Component extends ChapterPlayerTypographyBaseDirective {}

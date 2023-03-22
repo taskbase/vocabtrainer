@@ -1,4 +1,4 @@
-@import "../../../chapter-player.vars";
+@import "../../../tb.vars";
 
 :host {
   display: block;
@@ -9,7 +9,7 @@
 
   font-size: 32px;
   line-height: 160%;
-  @media (min-width: $chapter-player-breakpoint-xl) {
+  @media (min-width: $tb-breakpoint-xl) {
     font-size: 48px;
     line-height: 140%;
   }

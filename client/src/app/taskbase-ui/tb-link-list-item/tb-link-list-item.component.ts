@@ -10,9 +10,9 @@ export interface ChapterPlayerLink {
 }
 
 @Component({
-  selector: 'app-chapter-player-link-list-item',
-  templateUrl: './chapter-player-link-list-item.component.html',
-  styleUrls: ['./chapter-player-link-list-item.component.scss'],
+  selector: 'tb-link-list-item',
+  templateUrl: './tb-link-list-item.component.html',
+  styleUrls: ['./tb-link-list-item.component.scss'],
 })
 export class ChapterPlayerLinkListItemComponent implements OnInit {
   @Input()
