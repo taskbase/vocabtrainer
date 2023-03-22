@@ -1,0 +1,18 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "./reset";
+@import "./fonts.scss";
+
+* {
+  box-sizing: border-box;
+}
+
+.app-unstyled-button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
