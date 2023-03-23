@@ -16,6 +16,8 @@ import { TbMailtoComponent } from './tb-mailto/tb-mailto.component';
 import { TbLinkComponent } from './tb-link/tb-link.component';
 import { TbLinkListItemComponent } from './tb-link-list-item/tb-link-list-item.component';
 import { TbProgressCircleComponent } from './tb-progress-circle/tb-progress-circle.component';
+import { TbChatMessageComponent } from './tb-chat-message/tb-chat-message.component';
+import { TbChatMessageListComponent } from './tb-chat-message-list/tb-chat-message-list.component';
 
 @NgModule({
   declarations: [
@@ -31,13 +33,11 @@ import { TbProgressCircleComponent } from './tb-progress-circle/tb-progress-circ
     TbMailtoComponent,
     TbLinkComponent,
     TbLinkListItemComponent,
-  ],
-  imports: [
-    CommonModule,
-    TbIconModule,
-    RouterModule,
     TbProgressCircleComponent,
+    TbChatMessageComponent,
+    TbChatMessageListComponent,
   ],
+  imports: [CommonModule, TbIconModule, RouterModule],
   exports: [
     TbButtonComponent,
     TbLinkListComponent,
@@ -52,6 +52,8 @@ import { TbProgressCircleComponent } from './tb-progress-circle/tb-progress-circ
     TbMailtoComponent,
     TbLinkComponent,
     TbProgressCircleComponent,
+    TbChatMessageComponent,
+    TbChatMessageListComponent,
   ],
 })
 export class TbUiModule {}

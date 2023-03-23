@@ -12,8 +12,6 @@ import { isMobile } from '../../utils';
   selector: 'tb-progress-circle',
   templateUrl: './tb-progress-circle.component.html',
   styleUrls: ['./tb-progress-circle.component.scss'],
-  imports: [CommonModule],
-  standalone: true,
 })
 export class TbProgressCircleComponent implements OnInit {
   @Input() progress = 0;

@@ -8,6 +8,7 @@ $tb-color-primary-600: #3c3eb2;
 $tb-color-primary-900: #1f1584;
 
 $tb-color-secondary: #a0fbdd;
+$tb-color-secondary-50: #dafef2;
 $tb-color-secondary-100: #a0fbdd;
 
 $tb-color-gray-3: #f5f5f5;
@@ -21,6 +22,8 @@ $tb-breakpoint-md: 768px;
 $tb-breakpoint-lg: 992px;
 $tb-breakpoint-xl: 1200px;
 $tb-breakpoint-xxl: 1400px;
+
+$tb-font-primary: "Inter", sans-serif;
 
 // app- prefixed variables are specific to this application
 $app-navbar-height: 100px;

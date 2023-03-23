@@ -1,0 +1,17 @@
+<div class="chat">
+  <div
+    class="chat-box"
+    [ngClass]="isTaskbase ? 'chat-box-taskbase' : 'chat-box-user'"
+  >
+    <img
+      [src]="
+        isTaskbase
+          ? 'assets/img/icons/avatar.png'
+          : 'assets/img/icons/single-neutral-circle.svg'
+      "
+      width="32"
+      height="32"
+    />
+    <div>{{ text }}</div>
+  </div>
+</div>

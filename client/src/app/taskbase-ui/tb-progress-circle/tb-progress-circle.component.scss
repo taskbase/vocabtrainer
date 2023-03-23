@@ -2,7 +2,7 @@
 @import "variables";
 
 :host {
-  font-family: "Inter", sans-serif;
+  font-family: $tb-font-primary;
   font-weight: 600;
   display: inline-flex;
   flex-direction: column;

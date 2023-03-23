@@ -1,0 +1,32 @@
+@import "variables";
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  font-family: $tb-font-primary;
+  font-size: 16px;
+  line-height: 1.8;
+  color: $tb-color-primary;
+}
+
+.chat-box-taskbase {
+  align-self: flex-start;
+  background-color: $tb-color-primary-50;
+  border-radius: 16px 16px 16px 0;
+}
+.chat-box-user {
+  align-self: flex-end;
+  background-color: $tb-color-secondary-50;
+  border-radius: 16px 0 16px 16px;
+}
+
+.chat-box {
+  padding: 16px;
+  display: flex;
+  justify-content: flex-start;
+  max-width: 555px;
+
+  img {
+    margin-right: 16px;
+  }
+}
