@@ -1,4 +1,5 @@
 import { Directive, HostBinding, Input, OnInit } from '@angular/core';
+import { getScssVariable, ScssVariable } from '../../scss-variables.generated';
 
 export type TbTypographyColor = 'primary' | 'default' | 'white';
 
@@ -18,7 +19,7 @@ export class TbTypographyBaseDirective implements OnInit {
   }
 
   @HostBinding('style.font-family')
-  fontFamily: string = `"Inter", sans-serif`;
+  fontFamily: string = getScssVariable(ScssVariable.TB_FONT_PRIMARY);
 
   @HostBinding('style.text-align')
   @Input()

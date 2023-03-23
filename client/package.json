@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "npm run scss2json && ng serve --disable-host-check",
-    "build": "npm run scss2json && ng build",
+    "start": "npm run generate && ng serve --disable-host-check",
+    "build": "npm run generate && ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "scss2json && ng test",
+    "test": "npm run generate && ng test",
+    "generate": "npm run scss2json",
     "scss2json": "node ./scss-to-typescript.js src/styles/variables.scss src/app/scss-variables.generated.ts"
   },
   "private": true,

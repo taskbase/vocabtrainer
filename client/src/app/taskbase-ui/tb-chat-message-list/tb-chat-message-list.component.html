@@ -1,0 +1,8 @@
+<ng-container *ngFor="let message of messages">
+  <div>
+    <tb-chat-message
+      [isTaskbase]="message.isTaskbase"
+      [text]="message.text"
+    ></tb-chat-message>
+  </div>
+</ng-container>

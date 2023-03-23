@@ -1,7 +1,7 @@
 @import "variables";
 
 :host {
-  font-family: "Inter", sans-serif;
+  font-family: $tb-font-primary;
 }
 
 @mixin spaced-children($space) {
