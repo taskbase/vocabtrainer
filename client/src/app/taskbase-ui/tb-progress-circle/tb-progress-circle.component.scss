@@ -1,0 +1,74 @@
+@import "variables";
+@import "variables";
+
+:host {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  display: inline-flex;
+  flex-direction: column;
+  color: $tb-color-primary;
+}
+
+.circle {
+  position: relative;
+}
+
+.circle,
+svg {
+  width: var(--progress-circle-size);
+  height: var(--progress-circle-size);
+}
+
+svg {
+  transform: rotate(-90deg);
+
+  circle {
+    fill: transparent;
+    stroke-width: var(--progress-circle-stroke);
+  }
+}
+
+.circle-progress {
+  stroke: $tb-color-primary;
+  stroke-linecap: round;
+}
+
+.circle-track {
+  stroke: $tb-color-primary-50;
+}
+
+.circle-content {
+  $gap-from-circle: 12px;
+
+  position: absolute;
+  top: $gap-from-circle;
+  left: $gap-from-circle;
+  right: $gap-from-circle;
+  bottom: $gap-from-circle;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  text-align: center;
+
+  div {
+    padding-top: 4px;
+  }
+}
+
+.circle-content-primary {
+  background-color: $tb-color-primary-50;
+  font-size: 16px;
+}
+.circle-content-secondary {
+  background-color: $tb-color-secondary;
+  font-size: 24px;
+}
+
+.subtitle {
+  text-align: center;
+  padding: 12px 0;
+  font-size: 16px;
+}

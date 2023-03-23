@@ -26,7 +26,7 @@ export class TbTypographyBaseDirective implements OnInit {
 
   @HostBinding('style.margin-bottom')
   @Input()
-  marginBottom: '0' | '8px' | '16px' | '32px' | '64px' | null = null;
+  marginBottom: '0' | '8px' | '16px' | '32px' | '48px' | '64px' | null = null;
 
   constructor() {}
 
