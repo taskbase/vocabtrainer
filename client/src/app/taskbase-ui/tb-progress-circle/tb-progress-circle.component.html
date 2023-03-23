@@ -2,18 +2,16 @@
   <svg>
     <circle
       class="circle-track"
-      [ngStyle]="{
-        cx: center,
-        cy: center,
-        r: radius
-      }"
+      [attr.cx]="center"
+      [attr.cy]="center"
+      [attr.r]="radius"
     ></circle>
     <circle
       class="circle-progress"
+      [attr.cx]="center"
+      [attr.cy]="center"
+      [attr.r]="radius"
       [ngStyle]="{
-        cx: center,
-        cy: center,
-        r: radius,
         'strokeDasharray.px': arcLength,
         'strokeDashoffset.px': getArcOffset()
       }"
