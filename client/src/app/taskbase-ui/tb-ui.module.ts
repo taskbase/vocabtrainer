@@ -17,6 +17,7 @@ import { TbLinkComponent } from './tb-link/tb-link.component';
 import { TbLinkListItemComponent } from './tb-link-list-item/tb-link-list-item.component';
 import { TbProgressCircleComponent } from './tb-progress-circle/tb-progress-circle.component';
 import { TbChatMessageComponent } from './tb-chat-message/tb-chat-message.component';
+import { TbChatMessageListComponent } from './tb-chat-message-list/tb-chat-message-list.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { TbChatMessageComponent } from './tb-chat-message/tb-chat-message.compon
     TbLinkListItemComponent,
     TbProgressCircleComponent,
     TbChatMessageComponent,
+    TbChatMessageListComponent,
   ],
   imports: [CommonModule, TbIconModule, RouterModule],
   exports: [
@@ -51,6 +53,7 @@ import { TbChatMessageComponent } from './tb-chat-message/tb-chat-message.compon
     TbLinkComponent,
     TbProgressCircleComponent,
     TbChatMessageComponent,
+    TbChatMessageListComponent,
   ],
 })
 export class TbUiModule {}
