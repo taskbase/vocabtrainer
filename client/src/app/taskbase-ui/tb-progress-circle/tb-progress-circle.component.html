@@ -1,0 +1,38 @@
+<div class="circle">
+  <svg>
+    <circle
+      class="circle-track"
+      [ngStyle]="{
+        cx: center,
+        cy: center,
+        r: radius
+      }"
+    ></circle>
+    <circle
+      class="circle-progress"
+      [ngStyle]="{
+        cx: center,
+        cy: center,
+        r: radius,
+        'strokeDasharray.px': arcLength,
+        'strokeDashoffset.px': getArcOffset()
+      }"
+    ></circle>
+  </svg>
+
+  <div
+    class="circle-content"
+    [ngClass]="
+      contentBackground === 'primary'
+        ? 'circle-content-primary'
+        : 'circle-content-secondary'
+    "
+  >
+    <img [src]="icon" width="48" height="48" />
+    <div>{{ contentText === null ? progress + "%" : contentText }}</div>
+  </div>
+</div>
+
+<div class="subtitle" *ngIf="subtitle !== null">
+  {{ subtitle }}
+</div>
