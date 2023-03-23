@@ -3,7 +3,7 @@
 .chat {
   display: flex;
   flex-direction: column;
-  font-family: "Inter", sans-serif;
+  font-family: $tb-font-primary;
   font-size: 16px;
   line-height: 1.8;
   color: $tb-color-primary;
