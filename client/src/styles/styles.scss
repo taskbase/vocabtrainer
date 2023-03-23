@@ -2,9 +2,14 @@
 
 @import "./reset";
 @import "./fonts.scss";
+@import "variables";
 
 * {
   box-sizing: border-box;
+}
+
+*::selection {
+  background-color: $tb-color-primary-50;
 }
 
 .app-unstyled-button {
