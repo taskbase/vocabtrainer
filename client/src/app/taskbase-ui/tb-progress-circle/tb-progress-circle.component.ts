@@ -56,6 +56,6 @@ export class TbProgressCircleComponent implements OnInit {
   }
 
   getArcOffset(): number {
-    return this.arcLength * ((100 - this.progress) / 100);
+    return this.arcLength * (1 - this.progress / 100);
   }
 }
