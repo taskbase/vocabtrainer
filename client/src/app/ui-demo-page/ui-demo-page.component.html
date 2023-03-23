@@ -1,2 +1,15 @@
 <tb-h3> Chat Elements </tb-h3>
 <tb-chat-message-list [messages]="chatMessages"></tb-chat-message-list>
+
+<tb-h3>Incorrect feedback</tb-h3>
+<tb-incorrect-feedback>
+  <ng-container mistake>
+    <p>This is correct in terms of <u>content</u>.</p>
+    <p>The correct tense would be: <u>Simple present</u>.</p>
+    <p>You made a <u>typo</u>.</p>
+  </ng-container>
+  <ng-container explanation>
+    <p style="font-weight: 600">He lives in a big house.</p>
+    <p>Er lebt in einem grossen Haus.</p>
+  </ng-container>
+</tb-incorrect-feedback>

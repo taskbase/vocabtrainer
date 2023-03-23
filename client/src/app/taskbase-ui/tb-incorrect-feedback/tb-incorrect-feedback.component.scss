@@ -1,0 +1,37 @@
+@import "variables";
+
+.feedback {
+  background-color: $tb-color-primary;
+  padding: 32px;
+  border-radius: 8px;
+  font-family: $tb-font-primary;
+
+  @media (min-width: $tb-breakpoint-md) {
+    display: flex;
+  }
+
+  > svg {
+    flex-shrink: 0;
+    margin-right: 16px;
+  }
+
+  > div {
+    width: 100%;
+  }
+}
+
+.feedback-mistake {
+  color: $tb-color-white;
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.feedback-explanation {
+  background-color: $tb-color-primary-50;
+  color: $tb-color-primary;
+  margin-top: 16px;
+  padding: 16px;
+  font-size: 20px;
+  line-height: 1.6;
+  border-radius: 8px;
+}
