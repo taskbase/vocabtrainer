@@ -15,6 +15,7 @@ import { TbText5Component } from './typography/tb-text5/tb-text5.component';
 import { TbMailtoComponent } from './tb-mailto/tb-mailto.component';
 import { TbLinkComponent } from './tb-link/tb-link.component';
 import { TbLinkListItemComponent } from './tb-link-list-item/tb-link-list-item.component';
+import { TbChatMessageComponent } from './tb-chat-message/tb-chat-message.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { TbLinkListItemComponent } from './tb-link-list-item/tb-link-list-item.c
     TbMailtoComponent,
     TbLinkComponent,
     TbLinkListItemComponent,
+    TbChatMessageComponent,
   ],
   imports: [CommonModule, TbIconModule, RouterModule],
   exports: [
@@ -45,6 +47,7 @@ import { TbLinkListItemComponent } from './tb-link-list-item/tb-link-list-item.c
     TbText5Component,
     TbMailtoComponent,
     TbLinkComponent,
+    TbChatMessageComponent,
   ],
 })
 export class TbUiModule {}
