@@ -31,9 +31,8 @@ import { TbChatMessageComponent } from './tb-chat-message/tb-chat-message.compon
     TbMailtoComponent,
     TbLinkComponent,
     TbLinkListItemComponent,
-    TbChatMessageComponent,
   ],
-  imports: [CommonModule, TbIconModule, RouterModule],
+  imports: [CommonModule, TbIconModule, RouterModule, TbChatMessageComponent],
   exports: [
     TbButtonComponent,
     TbLinkListComponent,
