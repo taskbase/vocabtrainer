@@ -3,7 +3,7 @@
 .language-icon {
   height: 32px;
 
-  @media (min-width: $breakpoint-md) {
+  @media (min-width: $tb-breakpoint-md) {
     height: 20px;
   }
 }

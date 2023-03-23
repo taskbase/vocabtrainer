@@ -15,6 +15,7 @@ import { TbText5Component } from './typography/tb-text5/tb-text5.component';
 import { TbMailtoComponent } from './tb-mailto/tb-mailto.component';
 import { TbLinkComponent } from './tb-link/tb-link.component';
 import { TbLinkListItemComponent } from './tb-link-list-item/tb-link-list-item.component';
+import { TbProgressCircleComponent } from './tb-progress-circle/tb-progress-circle.component';
 import { TbChatMessageComponent } from './tb-chat-message/tb-chat-message.component';
 
 @NgModule({
@@ -32,7 +33,13 @@ import { TbChatMessageComponent } from './tb-chat-message/tb-chat-message.compon
     TbLinkComponent,
     TbLinkListItemComponent,
   ],
-  imports: [CommonModule, TbIconModule, RouterModule, TbChatMessageComponent],
+  imports: [
+    CommonModule,
+    TbIconModule,
+    RouterModule,
+    TbProgressCircleComponent,
+    TbChatMessageComponent,
+  ],
   exports: [
     TbButtonComponent,
     TbLinkListComponent,
@@ -46,6 +53,7 @@ import { TbChatMessageComponent } from './tb-chat-message/tb-chat-message.compon
     TbText5Component,
     TbMailtoComponent,
     TbLinkComponent,
+    TbProgressCircleComponent,
     TbChatMessageComponent,
   ],
 })

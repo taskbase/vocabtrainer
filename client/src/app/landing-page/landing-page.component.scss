@@ -4,5 +4,16 @@
   display: grid;
   justify-items: center;
   align-items: center;
-  min-height: calc(100svh - $navbar-height);
+  min-height: calc(100svh - $app-navbar-height);
+}
+
+.landing-page-circles {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  @media (min-width: $tb-breakpoint-md) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  gap: 32px;
+
+  margin-bottom: 48px;
 }

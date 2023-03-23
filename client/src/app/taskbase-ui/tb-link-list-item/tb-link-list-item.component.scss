@@ -4,13 +4,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: $color-white;
+  background: $tb-color-white;
   padding: 16px;
 
   .link-text {
     font-size: 20px;
     line-height: 180%;
-    color: $color-primary;
+    color: $tb-color-primary;
     margin-right: 15px;
   }
 }
