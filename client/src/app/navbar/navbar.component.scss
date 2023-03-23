@@ -1,7 +1,7 @@
 @import "variables";
 
 :host {
-  height: $navbar-height;
+  height: $app-navbar-height;
   display: block;
 }
 
@@ -13,7 +13,7 @@
 
 .taskbase-logo {
   height: 16px;
-  @media (min-width: $breakpoint-md) {
+  @media (min-width: $tb-breakpoint-md) {
     height: 20px;
   }
 }

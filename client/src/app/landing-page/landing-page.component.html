@@ -1,26 +1,27 @@
 <div class="landing-page-wrapper">
   <div class="landing-page">
-    <tb-h3 color="primary">
+    <tb-h3 color="primary" marginBottom="48px">
       Hi there,<br />
       what would you like to learn today?
     </tb-h3>
-
-    <div style="display: flex; gap: 32px">
-      <tb-progress-circle
-        [progress]="20"
-        icon="assets/img/icons/food.svg"
-        subtitle="Food & Drinks"
-      ></tb-progress-circle>
-      <tb-progress-circle
-        [progress]="80"
-        icon="assets/img/icons/work.svg"
-        subtitle="Work"
-      ></tb-progress-circle>
-      <tb-progress-circle
-        contentBackground="primary"
-        contentText="Start now"
-        icon="assets/img/icons/misc.svg"
-      ></tb-progress-circle>
+    <div class="landing-page-circles-wrapper">
+      <div class="landing-page-circles">
+        <tb-progress-circle
+          [progress]="20"
+          icon="assets/img/icons/food.svg"
+          subtitle="Food & Drinks"
+        ></tb-progress-circle>
+        <tb-progress-circle
+          [progress]="80"
+          icon="assets/img/icons/work.svg"
+          subtitle="Work"
+        ></tb-progress-circle>
+        <tb-progress-circle
+          contentBackground="primary"
+          contentText="Start now"
+          icon="assets/img/icons/misc.svg"
+        ></tb-progress-circle>
+      </div>
     </div>
     <tb-button> Study now </tb-button>
   </div>

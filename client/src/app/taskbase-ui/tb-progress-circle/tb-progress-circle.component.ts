@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnInit,
+} from '@angular/core';
+import { isMobile } from '../../utils';
 
 @Component({
   selector: 'tb-progress-circle',
@@ -15,7 +22,10 @@ export class TbProgressCircleComponent implements OnInit {
   @Input() contentText: string | null = null;
   @Input() subtitle: string | null = null;
 
-  size = 164;
+  readonly smallSize = 140;
+  readonly largeSize = 164;
+
+  size = this.largeSize;
   stroke = 8;
 
   center = 0;
@@ -25,6 +35,12 @@ export class TbProgressCircleComponent implements OnInit {
   constructor(private el: ElementRef<HTMLElement>) {}
 
   ngOnInit(): void {
+    this.updateSize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  updateSize() {
+    this.size = isMobile() ? this.smallSize : this.largeSize;
     this.el.nativeElement.style.setProperty(
       '--progress-circle-size',
       `${this.size}px`
@@ -33,7 +49,6 @@ export class TbProgressCircleComponent implements OnInit {
       '--progress-circle-stroke',
       `${this.stroke}px`
     );
-
     // https://blog.logrocket.com/build-svg-circular-progress-component-react-hooks/
     this.center = this.size / 2;
     this.radius = this.center - this.stroke / 2;
