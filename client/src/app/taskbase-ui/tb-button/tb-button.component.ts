@@ -2,8 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { TbIcon } from '../tb-icon/tb-icon/tb-icon.component';
@@ -29,6 +31,8 @@ export class TbButtonComponent implements OnInit {
   @Input() iconPosition: TbIconPosition = 'right';
   @Input() disabled = false;
   @Input() invert = false; // TODO #3257: make inverted work
+  @Input() fullWidth = false;
+  @Output() onClick = new EventEmitter();
 
   @ViewChild('contentWrapper') content: ElementRef | null = null;
 
