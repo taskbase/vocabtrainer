@@ -1,0 +1,32 @@
+@import "variables";
+
+.options {
+  &.auto-width {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin-top: -8px;
+
+    @media (min-width: $tb-breakpoint-sm) {
+      flex-direction: row;
+    }
+
+    > tb-button {
+      margin-top: 8px;
+
+      @media (min-width: $tb-breakpoint-sm) {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  &.full-width {
+    > tb-button {
+      display: block;
+
+      &:not(:last-child) {
+        margin-bottom: 8px;
+      }
+    }
+  }
+}
