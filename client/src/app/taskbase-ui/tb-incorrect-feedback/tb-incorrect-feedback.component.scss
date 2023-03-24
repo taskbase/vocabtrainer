@@ -10,12 +10,12 @@
     display: flex;
   }
 
-  > svg {
+  .feedback-icon {
     flex-shrink: 0;
     margin-right: 16px;
   }
 
-  > div {
+  .feedback-mistake-explanation-wrapper {
     width: 100%;
   }
 }
