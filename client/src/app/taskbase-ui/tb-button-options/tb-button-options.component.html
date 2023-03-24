@@ -1,0 +1,12 @@
+<div class="options" [ngClass]="fullWidth ? 'full-width' : 'auto-width'">
+  <ng-container *ngFor="let opt of options">
+    <tb-button
+      type="outline"
+      [fullWidth]="fullWidth"
+      [disabled]="opt.disabled === true"
+      (onClick)="onClick.emit(opt.value)"
+    >
+      {{ opt.text }}
+    </tb-button>
+  </ng-container>
+</div>

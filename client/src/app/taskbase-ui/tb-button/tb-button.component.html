@@ -6,8 +6,11 @@
     size,
     iconPosition,
     icon != null ? 'icon-present' : 'no-icon',
-    invert ? 'invert' : ''
+    invert ? 'invert' : '',
+    fullWidth ? 'full-width' : ''
   ]"
+  type="button"
+  (click)="onClick.emit()"
 >
   <ng-container
     *ngIf="icon != null && (iconPosition === 'left' || iconPosition === 'fab')"
