@@ -10,6 +10,8 @@ import { LanguageDeComponent } from './navbar/language-selector/language-de/lang
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { TbUiModule } from './taskbase-ui/tb-ui.module';
 import { UiDemoPageComponent } from './ui-demo-page/ui-demo-page.component';
+import { LearnPageComponent } from './learn-page/learn-page.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -20,8 +22,9 @@ import { UiDemoPageComponent } from './ui-demo-page/ui-demo-page.component';
     LanguageDeComponent,
     LandingPageComponent,
     UiDemoPageComponent,
+    LearnPageComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, TbUiModule],
+  imports: [BrowserModule, AppRoutingModule, TbUiModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],
 })

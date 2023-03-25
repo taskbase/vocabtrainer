@@ -1,8 +1,10 @@
 import { Component, Input } from '@angular/core';
 
-interface ChatMessage {
+export interface ChatMessage {
   isTaskbase: boolean;
-  text: string;
+  text?: string;
+  audio?: string;
+  options?: string[];
 }
 @Component({
   selector: 'tb-chat-message-list',

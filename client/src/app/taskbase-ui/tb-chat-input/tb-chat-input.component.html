@@ -1,0 +1,9 @@
+<div class="input-wrapper">
+  <input
+    [disabled]="disabled"
+    [(ngModel)]="inputText"
+    type="text"
+    [placeholder]="disabled ? 'Thinking...' : 'Enter text here...'"
+    (keyup.enter)="onEnter()"
+  />
+</div>
