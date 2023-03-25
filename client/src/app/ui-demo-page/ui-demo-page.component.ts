@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ButtonOptions } from '../taskbase-ui/tb-button-options/tb-button-options.component';
+import { ChatMessage } from '../taskbase-ui/tb-chat-message-list/tb-chat-message-list.component';
 
 @Component({
   selector: 'app-ui-demo-page',
@@ -7,7 +8,7 @@ import { ButtonOptions } from '../taskbase-ui/tb-button-options/tb-button-option
   styleUrls: ['./ui-demo-page.component.scss'],
 })
 export class UiDemoPageComponent {
-  chatMessages = [
+  chatMessages: ChatMessage[] = [
     {
       isTaskbase: true,
       text: 'Hi I am Amber, your English teacher. I have prepared a learning session of about 10 minutes. Are you ready?',
