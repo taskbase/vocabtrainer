@@ -20,7 +20,7 @@ export class RecommenderService {
     const user = this.userService.userId;
     return of({
       type: 'essay',
-      instruction: 'Welcome!',
+      instruction: `Here is your task about ${topic}`,
     } as Bit);
     return this.http.post<Bit>(`/api/task/recommend`, {
       topic,

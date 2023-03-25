@@ -24,6 +24,8 @@ import { TbTaskComponent } from './tb-task/tb-task.component';
 import { TbEssayTaskComponent } from './tb-task/tb-essay-task/tb-essay-task.component';
 import { TbClozeTaskComponent } from './tb-task/tb-cloze-task/tb-cloze-task.component';
 import { TbMcTaskComponent } from './tb-task/tb-mc-task/tb-mc-task.component';
+import { TbChatInputComponent } from './tb-chat-input/tb-chat-input.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -48,8 +50,9 @@ import { TbMcTaskComponent } from './tb-task/tb-mc-task/tb-mc-task.component';
     TbEssayTaskComponent,
     TbClozeTaskComponent,
     TbMcTaskComponent,
+    TbChatInputComponent,
   ],
-  imports: [CommonModule, TbIconModule, RouterModule],
+  imports: [CommonModule, TbIconModule, RouterModule, FormsModule],
   exports: [
     TbButtonComponent,
     TbLinkListComponent,
@@ -69,6 +72,7 @@ import { TbMcTaskComponent } from './tb-task/tb-mc-task/tb-mc-task.component';
     TbIncorrectFeedbackComponent,
     TbButtonOptionsComponent,
     TbTaskComponent,
+    TbChatInputComponent,
   ],
 })
 export class TbUiModule {}
