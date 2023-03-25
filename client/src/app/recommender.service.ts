@@ -1,29 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { UserService } from './user.service';
-import { ClozeBit, EssayBit, MultipleChoiceText } from './bitmark.model';
-
-interface RecommendTaskRequest {
-  topic: string;
-  user_id: string;
-}
-
-interface RecommendTaskResponse {
-  bitmark: {
-    essay: EssayBit;
-    cloze: ClozeBit;
-    multipleChoiceText: MultipleChoiceText;
-  };
-}
+import {
+  FEEDBACK_CORRECT_MOCK_RESPONSE,
+  RECOMMEND_TASK_RESPONSE,
+} from './mocks';
+import { RecommendTaskRequest, RecommendTaskResponse } from './recommend.model';
+import { Bit } from './bitmark.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RecommenderService {
   readonly topics = ['FOOD_DRINKS', 'WORK', 'PRESENT_SIMPLE'];
-  readonly endpoint = 'https://a926-188-155-167-220.eu.ngrok.io/api';
-
+  readonly endpoint = `https://3e3d-188-155-167-220.eu.ngrok.io` + `/api`;
   constructor(private http: HttpClient, private userService: UserService) {}
   recommendTask(topic: string): Observable<RecommendTaskResponse> {
     const user = this.userService.userId;
@@ -35,5 +26,17 @@ export class RecommenderService {
       `${this.endpoint}/task/recommend`,
       recommendTaskRequest
     );
+  }
+
+  feedback(bit: Bit): Observable<Bit> {
+    return this.http.post<Bit>(`${this.endpoint}/feedback/compute`, bit);
+  }
+
+  recommendTaskMock(topic: string): Observable<RecommendTaskResponse> {
+    return of(RECOMMEND_TASK_RESPONSE);
+  }
+
+  feedbackMock(bit: Bit): Observable<Bit> {
+    return of(FEEDBACK_CORRECT_MOCK_RESPONSE) as any;
   }
 }

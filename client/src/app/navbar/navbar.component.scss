@@ -12,6 +12,7 @@
 }
 
 .taskbase-logo {
+  cursor: pointer;
   height: 16px;
   @media (min-width: $tb-breakpoint-md) {
     height: 20px;
