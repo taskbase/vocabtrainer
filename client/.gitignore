@@ -43,3 +43,4 @@ Thumbs.db
 
 # generated
 *.generated.ts
+swagger.json

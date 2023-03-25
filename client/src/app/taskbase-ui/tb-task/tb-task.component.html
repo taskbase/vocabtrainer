@@ -1,0 +1,11 @@
+<div>
+  <tb-text3>
+    {{ task?.instruction }}
+  </tb-text3>
+</div>
+<ng-container [ngSwitch]="task?.type">
+  <tb-cloze-task *ngSwitchCase="'cloze'"></tb-cloze-task>
+  <tb-essay-task *ngSwitchCase="'essay'" [task]="essayBit"></tb-essay-task>
+  <tb-mc-task *ngSwitchCase="'multiple-choice'"></tb-mc-task>
+  <div *ngSwitchDefault>Unknown task type {{ task?.type }}</div>
+</ng-container>

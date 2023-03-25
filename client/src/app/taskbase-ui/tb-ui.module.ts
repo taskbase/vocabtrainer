@@ -20,6 +20,10 @@ import { TbChatMessageComponent } from './tb-chat-message/tb-chat-message.compon
 import { TbChatMessageListComponent } from './tb-chat-message-list/tb-chat-message-list.component';
 import { TbIncorrectFeedbackComponent } from './tb-incorrect-feedback/tb-incorrect-feedback.component';
 import { TbButtonOptionsComponent } from './tb-button-options/tb-button-options.component';
+import { TbTaskComponent } from './tb-task/tb-task.component';
+import { TbEssayTaskComponent } from './tb-task/tb-essay-task/tb-essay-task.component';
+import { TbClozeTaskComponent } from './tb-task/tb-cloze-task/tb-cloze-task.component';
+import { TbMcTaskComponent } from './tb-task/tb-mc-task/tb-mc-task.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +44,10 @@ import { TbButtonOptionsComponent } from './tb-button-options/tb-button-options.
     TbChatMessageListComponent,
     TbIncorrectFeedbackComponent,
     TbButtonOptionsComponent,
+    TbTaskComponent,
+    TbEssayTaskComponent,
+    TbClozeTaskComponent,
+    TbMcTaskComponent,
   ],
   imports: [CommonModule, TbIconModule, RouterModule],
   exports: [
@@ -60,6 +68,7 @@ import { TbButtonOptionsComponent } from './tb-button-options/tb-button-options.
     TbChatMessageListComponent,
     TbIncorrectFeedbackComponent,
     TbButtonOptionsComponent,
+    TbTaskComponent,
   ],
 })
 export class TbUiModule {}
