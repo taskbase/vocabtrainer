@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { UserService } from './user.service';
 import {
   FEEDBACK_CORRECT_MOCK_RESPONSE,
+  FEEDBACK_WRONG_MOCK_RESPONSE,
   RECOMMEND_TASK_RESPONSE,
 } from './mocks';
 import { RecommendTaskRequest, RecommendTaskResponse } from './recommend.model';
@@ -36,7 +37,15 @@ export class RecommenderService {
     return of(RECOMMEND_TASK_RESPONSE);
   }
 
-  feedbackMock(bit: Bit): Observable<Bit> {
+  feedbackMockCorrect(bit: Bit): Observable<Bit> {
     return of(FEEDBACK_CORRECT_MOCK_RESPONSE) as any;
+  }
+
+  feedbackMockWrong(bit: Bit): Observable<Bit> {
+    return of(FEEDBACK_WRONG_MOCK_RESPONSE) as any;
+  }
+
+  mastery(): Observable<any> {
+    return this.http.post<any>(`${this.endpoint}/mastery`, {});
   }
 }
