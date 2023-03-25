@@ -1,0 +1,17 @@
+export const hackathonScript: [string, null | undefined | number][] = [
+  ["Hi! I am Taskbot, your personal learning assistant. What would you like to learn today?", null],
+  ["Cool, that sounds interesting.", 1],
+  ["Give me a moment, I'm making a personalized learning plan just for you...", 3],
+  ["Okay, here's today's study plan:", 1],
+  ["You need to improve your math skills to calculate derivatives. You need to understand gradient descent. You also need to have basic Python programming skills.", 1],
+  ["All this will take about 2 hours to learn.", 1],
+  ["Ready to go?", null],
+  ["Perfect! Let's start.", 1],
+  ["We'll start with math.", 1],
+  ["First, let's learn the constant rule. It says that the derivative of c times x equals c times the derivative of x, where c is a constant (not dependent on x). The derivative of x is always 1. What is the derivative of 5x?", null],
+  ["[Several math tasks later...]", 3],
+  ["Now we'll switch to some coding. Are you ready?", null],
+  ["[Several programming tasks later...]", 3],
+  ["That's it! You're all set to learn how to make your own neural network. Is there anything else you want to learn today?", null],
+  ["OK, then have a great day!", undefined],
+];
