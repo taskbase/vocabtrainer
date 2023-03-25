@@ -52,27 +52,18 @@ export class LearnPageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    const self = this;
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         this.topic = params['topic'];
 
         if (this.topic == 'ASSISTANT') {
-          // Follow a scripted interaction for the hackathon
-          this.chatMessages = [];
-          this.scriptProgress = 0;
-          this.chatService.messageEvent.subscribe((text) => {
-            this.addChatMessage({
-              isTaskbase: false,
-              text: text,
-            });
-            setTimeout(() => this.advanceScript(), 1000);
-          });
-          this.advanceScript();
+          this.handleAssistant();
         } else {
-          this.chatService.messageEvent.subscribe((text: string) => {
-            this.handleUserMessage(text);
-          });
+          this.subscriptions.push(
+            this.chatService.messageEvent.subscribe((text: string) => {
+              this.handleUserMessage(text);
+            })
+          );
         }
       })
     );
@@ -80,6 +71,20 @@ export class LearnPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
+  }
+
+  private handleAssistant() {
+    // Follow a scripted interaction for the hackathon
+    this.chatMessages = [];
+    this.scriptProgress = 0;
+    this.chatService.messageEvent.subscribe((text) => {
+      this.addChatMessage({
+        isTaskbase: false,
+        text: text,
+      });
+      setTimeout(() => this.advanceScript(), 1000);
+    });
+    this.advanceScript();
   }
 
   private addChatMessage(chatMessage: ChatMessage) {
@@ -94,6 +99,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
       text: scriptElement,
     });
 
+    // TODO: add some types and don't give different meanings to null and undefined
     if (action === null) {
       // Wait for user input
       this.chatService.disabled.next(false);
