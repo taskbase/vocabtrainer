@@ -38,7 +38,6 @@ export class LandingPageComponent {
 
   constructor(private router: Router) {}
   onClick(topic: DashboardTopic) {
-    console.log("landing", topic)
     this.router.navigate(APP_ROUTE_BUILDER.learn(topic.id));
   }
 }
