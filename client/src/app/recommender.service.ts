@@ -1,12 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { UserService } from './user.service';
-import { Bit } from './bitmark.model';
+import { ClozeBit, EssayBit, MultipleChoiceText } from './bitmark.model';
 
-interface RecommendTask {
+interface RecommendTaskRequest {
   topic: string;
-  userId: string;
+  user_id: string;
+}
+
+interface RecommendTaskResponse {
+  bitmark: {
+    essay: EssayBit;
+    cloze: ClozeBit;
+    multipleChoiceText: MultipleChoiceText;
+  };
 }
 
 @Injectable({
@@ -14,17 +22,18 @@ interface RecommendTask {
 })
 export class RecommenderService {
   readonly topics = ['FOOD_DRINKS', 'WORK', 'PRESENT_SIMPLE'];
+  readonly endpoint = 'https://a926-188-155-167-220.eu.ngrok.io/api';
 
   constructor(private http: HttpClient, private userService: UserService) {}
-  recommendTask(topic: string): Observable<Bit> {
+  recommendTask(topic: string): Observable<RecommendTaskResponse> {
     const user = this.userService.userId;
-    return of({
-      type: 'essay',
-      instruction: `Here is your task about ${topic}`,
-    } as Bit);
-    return this.http.post<Bit>(`/api/task/recommend`, {
+    const recommendTaskRequest: RecommendTaskRequest = {
       topic,
-      user,
-    });
+      user_id: user,
+    };
+    return this.http.post<RecommendTaskResponse>(
+      `${this.endpoint}/task/recommend`,
+      recommendTaskRequest
+    );
   }
 }
