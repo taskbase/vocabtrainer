@@ -26,8 +26,12 @@
         : 'circle-content-secondary'
     "
   >
-    <img [src]="icon" width="48" height="48" />
-    <div>{{ contentText === null ? progress + "%" : contentText }}</div>
+    <div class="circle-content-inner">
+      <img [src]="icon" width="48" height="48" class="circle-icon" />
+      <div class="circle-progress">
+        {{ contentText === null ? progress + "%" : contentText }}
+      </div>
+    </div>
   </div>
 </div>
 
