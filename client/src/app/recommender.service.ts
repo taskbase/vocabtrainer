@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { UserService } from './user.service';
 import { RECOMMEND_TASK_RESPONSE } from './mocks';
 import { RecommendTaskRequest, RecommendTaskResponse } from './recommend.model';
+import { Bit } from './bitmark.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +23,10 @@ export class RecommenderService {
       `${this.endpoint}/task/recommend`,
       recommendTaskRequest
     );
+  }
+
+  feedback(bit: Bit): Observable<Bit> {
+    return this.http.post<Bit>(`${this.endpoint}/feedback/compute`, bit);
   }
 
   recommendTaskMock(topic: string): Observable<RecommendTaskResponse> {
