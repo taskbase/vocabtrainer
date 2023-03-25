@@ -60,9 +60,10 @@ export class LearnPageComponent implements OnInit, OnDestroy {
       // disable input field until complete
       this.chatService.disabled.next(true);
 
-      let taskReceived = false;
+      let requestFinished = false;
       this.recommenderService.recommendTask(this.topic).subscribe({
         error: () => {
+          requestFinished = true;
           this.addChatMessage({
             isTaskbase: true,
             text: this.pickRandomElement([
@@ -74,9 +75,10 @@ export class LearnPageComponent implements OnInit, OnDestroy {
               `1+1 = 226662552 (server error)`,
             ]),
           });
+          this.chatService.disabled.next(false);
         },
         next: (task) => {
-          taskReceived = true;
+          requestFinished = true;
           this.removeThinkingMessage();
           const chosenTask = task.bitmark.essay;
           if (chosenTask.instruction) {
@@ -97,7 +99,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
 
       // add a temporary thinking message...
       setTimeout(() => {
-        if (!taskReceived) {
+        if (!requestFinished) {
           this.addChatMessage({
             isTaskbase: true,
             text: this.thinkingMessage,
