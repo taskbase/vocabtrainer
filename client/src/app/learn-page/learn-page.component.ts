@@ -2,12 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RecommenderService } from '../recommender.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Bit, EssayBit } from '../bitmark.model';
+import { Bit, BitType, ClozeBit, EssayBit } from '../bitmark.model';
 import { ChatService } from '../taskbase-ui/chat.service';
 import { hackathonScript } from '../chat-hackathon-script';
 import { ChatMessage } from '../taskbase-ui/tb-chat-message-list/tb-chat-message-list.component';
 import { RecommendTaskResponse } from '../recommend.model';
-import { SUCCESS_MESSAGES } from '../mocks';
+import { FINISHED_MESSAGES, SUCCESS_MESSAGES } from '../mocks';
 
 enum ChatState {
   INITIAL = 'INITIAL',
@@ -16,6 +16,7 @@ enum ChatState {
   DIFFICULTY3 = 'DIFFICULTY3',
   DIFFICULTY2 = 'DIFFICULTY2',
   DIFFICULTY1 = 'DIFFICULTY1',
+  FINISHED = 'FINISHED',
 }
 
 @Component({
@@ -26,6 +27,7 @@ enum ChatState {
 export class LearnPageComponent implements OnInit, OnDestroy {
   topic: string = this.recommenderService.topics[0];
   currentTask: Bit | null = null;
+  currentResponse: RecommendTaskResponse | null = null;
   subscriptions: Subscription[] = [];
   readonly thinkingMessage = `Thinking...`;
 
@@ -89,6 +91,9 @@ export class LearnPageComponent implements OnInit, OnDestroy {
 
   private addChatMessage(chatMessage: ChatMessage) {
     this.chatMessages = [...this.chatMessages, chatMessage];
+    setTimeout(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+    }, 0);
   }
 
   private advanceScript() {
@@ -123,82 +128,156 @@ export class LearnPageComponent implements OnInit, OnDestroy {
         text,
       });
 
-      const handlers: Record<ChatState, Function> = {
-        [ChatState.INITIAL]: () => {
-          if (
-            text.toLowerCase().indexOf('yes') > -1 ||
-            text.toLowerCase().indexOf('sure') > -1
-          ) {
-            this.addChatMessage({
-              isTaskbase: true,
-              text: `Great, let's start then!`,
-            });
-            this.fetchNextTask();
-          } else {
-            this.addChatMessage({
-              isTaskbase: true,
-              text: `Is that a yes?`,
-            });
-          }
-        },
-        [ChatState.USER_READY]: () => {
-          this.fetchNextTask();
-        },
-        [ChatState.DIFFICULTY4]: () => {
-          this.handleAttempt(text);
-        },
-        [ChatState.DIFFICULTY3]: () => {},
-        [ChatState.DIFFICULTY2]: () => {},
-        [ChatState.DIFFICULTY1]: () => {},
-      };
-      handlers[this.state]();
+      this.checkStateMachine(text);
     }
   }
 
-  private handleAttempt(text: string) {
-    (this.currentTask as EssayBit).answer.text = text;
-    this.recommenderService.feedback(this.currentTask as Bit).subscribe({
-      next: (bit: any) => {
-        const isCorrect = bit.feedback.every(
-          (feedback: any) => feedback.correctness === 'CORRECT'
-        );
-        if (isCorrect) {
-          this.solvedTasksCounter++;
-          if (this.solvedTasksCounter < this.taskLimit) {
-            this.addChatMessage({
-              isTaskbase: true,
-              text: this.pickRandomElement(this.successMessages),
-            });
-            this.fetchNextTask();
-          } else {
-            this.addChatMessage({
-              isTaskbase: true,
-              text: `You've completed all ${this.taskLimit} tasks we've asked. Woohoo! Go back to the dashboard to check your mastery.`,
-            });
-          }
+  private checkStateMachine(text: string) {
+    const handlers: Record<ChatState, Function> = {
+      [ChatState.INITIAL]: () => {
+        if (
+          text.toLowerCase().indexOf('yes') > -1 ||
+          text.toLowerCase().indexOf('sure') > -1
+        ) {
+          this.addChatMessage({
+            isTaskbase: true,
+            text: `Great, let's start then!`,
+          });
+          this.fetchNextTask();
         } else {
-          this.handleWrongAttempt(bit);
+          this.addChatMessage({
+            isTaskbase: true,
+            text: `Is that a yes?`,
+          });
         }
       },
-      error: () => {
-        this.genericErrorHandler();
+      [ChatState.USER_READY]: () => {
+        this.fetchNextTask();
       },
-    });
+      [ChatState.DIFFICULTY4]: () => {
+        this.handleAttempt(text, 'essay');
+      },
+      [ChatState.DIFFICULTY3]: () => {
+        this.handleAttempt(text, 'essay-audio');
+      },
+      [ChatState.DIFFICULTY2]: () => {
+        this.handleAttempt(text, 'cloze');
+      },
+      [ChatState.DIFFICULTY1]: () => {
+        this.addChatMessage({
+          isTaskbase: true,
+          text: `Let's try another task.`,
+        });
+        this.handleGoNext(false);
+      },
+      [ChatState.FINISHED]: () => {
+        this.addChatMessage({
+          isTaskbase: true,
+          text: this.pickRandomElement(FINISHED_MESSAGES),
+        });
+      },
+    };
+    handlers[this.state]();
+  }
+
+  private handleAttempt(text: string, type: string) {
+    if (type === 'essay') {
+      (this.currentTask as EssayBit).answer.text = text;
+    } else if (type === 'essay-audio') {
+      (this.currentTask as EssayBit).answer.text = text;
+      (this.currentTask as EssayBit).feedbackEngine.feedbackId += `-audio`;
+    } else if (type === 'cloze') {
+      // Assumption: there is only one gap. This is satisfied by tasks from the taskpool.
+      const gap = (this.currentTask as ClozeBit).body.find(
+        (elt) => elt.type === 'gap'
+      );
+      (gap as any).answer.text = text;
+    } else {
+      // NEVER
+      console.error('you are not here. NO!');
+    }
+    this.addThinkingMessage();
+    this.recommenderService
+      .feedbackMockCorrect(this.currentTask as Bit)
+      .subscribe({
+        next: (bit: any) => {
+          this.removeThinkingMessage();
+          const isCorrect = bit.feedback.every(
+            (feedback: any) => feedback.correctness === 'CORRECT'
+          );
+          if (isCorrect) {
+            this.handleGoNext();
+          } else {
+            this.handleWrongAttempt(bit);
+          }
+        },
+        error: () => {
+          this.genericErrorHandler();
+        },
+      });
+  }
+
+  private handleGoNext(wasCorrect: boolean = true) {
+    this.solvedTasksCounter++;
+    this.state = ChatState.DIFFICULTY4;
+    if (wasCorrect) {
+      this.addChatMessage({
+        isTaskbase: true,
+        text: this.pickRandomElement(this.successMessages),
+      });
+    }
+    if (this.solvedTasksCounter < this.taskLimit) {
+      this.fetchNextTask();
+    } else {
+      this.state = ChatState.FINISHED;
+      this.addChatMessage({
+        isTaskbase: true,
+        text: `You've completed all ${this.taskLimit} tasks. Woohoo! Go back to the dashboard to check your mastery.`,
+      });
+    }
   }
 
   private handleWrongAttempt(bit: any) {
-    bit.feedback.forEach((feedback: any) => {
-      this.addChatMessage({
-        isTaskbase: true,
-        text: feedback.message,
-      });
+    const firstFeedback = bit.feedback[0];
+    this.addChatMessage({
+      isTaskbase: true,
+      text: firstFeedback.message,
     });
     if (this.state === ChatState.DIFFICULTY4) {
       this.state = ChatState.DIFFICULTY3;
       this.addChatMessage({
         isTaskbase: true,
-        text: ``,
+        text: `Almost there. Here's an audio, maybe this helps.`,
       });
+      this.addChatMessage({
+        isTaskbase: true,
+        audio: (this.currentTask as EssayBit).resource?.audio.src,
+      });
+    } else if (this.state === ChatState.DIFFICULTY3) {
+      this.state = ChatState.DIFFICULTY2;
+      this.addChatMessage({
+        isTaskbase: true,
+        text: `Let me help you out here. Just give me the missing word.`,
+      });
+      const clozeBit = this.currentResponse?.bitmark.cloze as ClozeBit;
+      this.currentTask = clozeBit;
+
+      // only add the body, the instruction is useless.
+      this.addChatMessage({
+        isTaskbase: true,
+        text: clozeBit.body
+          .map((elt) => {
+            if (elt.type === 'text') {
+              return (elt as any).text;
+            } else {
+              return `________`;
+            }
+          })
+          .join(''),
+      });
+    } else if (this.state === ChatState.DIFFICULTY2) {
+      this.state = ChatState.DIFFICULTY1;
+      this.checkStateMachine('');
     }
   }
 
@@ -206,33 +285,30 @@ export class LearnPageComponent implements OnInit, OnDestroy {
     // disable input field until complete
     this.chatService.disabled.next(true);
 
-    let requestFinished = false;
-    this.recommenderService.recommendTask(this.topic).subscribe({
+    this.addThinkingMessage();
+
+    this.recommenderService.recommendTaskMock(this.topic).subscribe({
       error: () => {
-        requestFinished = true;
         this.genericErrorHandler();
       },
       next: (task) => {
-        requestFinished = true;
         this.removeThinkingMessage();
         this.handleTaskReceived(task);
       },
     });
-
-    // add a temporary thinking message...
-    setTimeout(() => {
-      if (!requestFinished) {
-        this.addChatMessage({
-          isTaskbase: true,
-          text: this.thinkingMessage,
-        });
-      }
-    }, 200);
   }
 
-  private handleTaskReceived(task: RecommendTaskResponse) {
+  private addThinkingMessage() {
+    this.addChatMessage({
+      isTaskbase: true,
+      text: this.thinkingMessage,
+    });
+  }
+
+  private handleTaskReceived(response: RecommendTaskResponse) {
     this.state = ChatState.DIFFICULTY4;
-    const chosenTask = task.bitmark.essay;
+    this.currentResponse = response;
+    const chosenTask = response.bitmark.essay;
     this.currentTask = chosenTask;
     if (chosenTask.instruction) {
       this.addChatMessage({
@@ -270,6 +346,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
         `1+1 = 226662552 (server error)`,
       ]),
     });
+    this.removeThinkingMessage();
     this.chatService.disabled.next(false);
   }
 
