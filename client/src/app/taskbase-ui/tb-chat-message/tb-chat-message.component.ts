@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ChatMessage } from '../tb-chat-message-list/tb-chat-message-list.component';
 
 @Component({
   selector: 'tb-chat-message',
@@ -6,6 +7,8 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./tb-chat-message.component.scss'],
 })
 export class TbChatMessageComponent {
-  @Input() isTaskbase = true;
-  @Input() text = '';
+  @Input() message: ChatMessage = {
+    isTaskbase: true,
+    text: 'Default',
+  };
 }
