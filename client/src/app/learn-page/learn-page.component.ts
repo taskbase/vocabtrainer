@@ -6,6 +6,7 @@ import { Bit, EssayBit } from '../bitmark.model';
 import { ChatService } from '../taskbase-ui/chat.service';
 import { ChatMessage } from '../taskbase-ui/tb-chat-message-list/tb-chat-message-list.component';
 import { RecommendTaskResponse } from '../recommend.model';
+import { SUCCESS_MESSAGES } from '../mocks';
 
 enum ChatState {
   INITIAL = 'INITIAL',
@@ -27,6 +28,10 @@ export class LearnPageComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   readonly thinkingMessage = `Thinking...`;
 
+  readonly successMessages = SUCCESS_MESSAGES;
+
+  solvedTasksCounter = 0;
+
   state: ChatState = ChatState.INITIAL;
 
   chatMessages: ChatMessage[] = [
@@ -35,6 +40,8 @@ export class LearnPageComponent implements OnInit, OnDestroy {
       text: 'Hi I am Amber, your English teacher. I have prepared a learning session of about 10 minutes. Are you ready?',
     },
   ];
+
+  readonly taskLimit = 3;
 
   constructor(
     private recommenderService: RecommenderService,
@@ -79,7 +86,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
               isTaskbase: true,
               text: `Great, let's start then!`,
             });
-            this.handleUserReady();
+            this.fetchNextTask();
           } else {
             this.addChatMessage({
               isTaskbase: true,
@@ -88,7 +95,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
           }
         },
         [ChatState.USER_READY]: () => {
-          this.handleUserReady();
+          this.fetchNextTask();
         },
         [ChatState.DIFFICULTY4]: () => {
           this.handleAttempt(text);
@@ -103,38 +110,60 @@ export class LearnPageComponent implements OnInit, OnDestroy {
 
   private handleAttempt(text: string) {
     (this.currentTask as EssayBit).answer.text = text;
-    this.recommenderService
-      .feedback(this.currentTask as Bit)
-      .subscribe((bit: any) => {
-        bit.feedback.forEach((feedback: any) => {
-          this.addChatMessage({
-            isTaskbase: true,
-            text: feedback.message,
-          });
-        });
-      });
+    this.recommenderService.feedback(this.currentTask as Bit).subscribe({
+      next: (bit: any) => {
+        const isCorrect = bit.feedback.every(
+          (feedback: any) => feedback.correctness === 'CORRECT'
+        );
+        if (isCorrect) {
+          this.solvedTasksCounter++;
+          if (this.solvedTasksCounter < this.taskLimit) {
+            this.addChatMessage({
+              isTaskbase: true,
+              text: this.pickRandomElement(this.successMessages),
+            });
+            this.fetchNextTask();
+          } else {
+            this.addChatMessage({
+              isTaskbase: true,
+              text: `You've completed all ${this.taskLimit} tasks we've asked. Woohoo! Go back to the dashboard to check your mastery.`,
+            });
+          }
+        } else {
+          this.handleWrongAttempt(bit);
+        }
+      },
+      error: () => {
+        this.genericErrorHandler();
+      },
+    });
   }
 
-  private handleUserReady() {
+  private handleWrongAttempt(bit: any) {
+    bit.feedback.forEach((feedback: any) => {
+      this.addChatMessage({
+        isTaskbase: true,
+        text: feedback.message,
+      });
+    });
+    if (this.state === ChatState.DIFFICULTY4) {
+      this.state = ChatState.DIFFICULTY3;
+      this.addChatMessage({
+        isTaskbase: true,
+        text: ``,
+      });
+    }
+  }
+
+  private fetchNextTask() {
     // disable input field until complete
     this.chatService.disabled.next(true);
 
     let requestFinished = false;
-    this.recommenderService.recommendTaskMock(this.topic).subscribe({
+    this.recommenderService.recommendTask(this.topic).subscribe({
       error: () => {
         requestFinished = true;
-        this.addChatMessage({
-          isTaskbase: true,
-          text: this.pickRandomElement([
-            `Man, this server really isn't working today. I wonder who's fault it is?`,
-            `Lol, server fault`,
-            `I'm feeling sleepy, not answering this today. (server error)`,
-            `Give me a break please. (server error)`,
-            `Can you think about something easier? (server error)`,
-            `1+1 = 226662552 (server error)`,
-          ]),
-        });
-        this.chatService.disabled.next(false);
+        this.genericErrorHandler();
       },
       next: (task) => {
         requestFinished = true;
@@ -180,6 +209,21 @@ export class LearnPageComponent implements OnInit, OnDestroy {
     ) {
       this.chatMessages = [...this.chatMessages.slice(0, -1)];
     }
+  }
+
+  private genericErrorHandler() {
+    this.addChatMessage({
+      isTaskbase: true,
+      text: this.pickRandomElement([
+        `Man, this server really isn't working today. I wonder who's fault it is?`,
+        `Lol, server fault`,
+        `I'm feeling sleepy, not answering this today. (server error)`,
+        `Give me a break please. (server error)`,
+        `Can you think about something easier? (server error)`,
+        `1+1 = 226662552 (server error)`,
+      ]),
+    });
+    this.chatService.disabled.next(false);
   }
 
   private pickRandomElement<T>(arr: T[]): T {
