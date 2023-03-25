@@ -1,1 +1,9 @@
-<tb-task [task]="task"></tb-task>
+<tb-chat-message-list [messages]="chatMessages"></tb-chat-message-list>
+
+<div *ngIf="task != null">
+  <tb-task [task]="task"></tb-task>
+</div>
+
+<div class="chat-input">
+  <tb-chat-input></tb-chat-input>
+</div>
