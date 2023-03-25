@@ -28,10 +28,17 @@ export class LandingPageComponent {
       id: 'WORK',
       icon: 'work',
     },
+    {
+      title: 'Your personal mentor',
+      progress: 0,
+      id: 'ASSISTANT',
+      icon: 'single-neutral-circle',
+    },
   ];
 
   constructor(private router: Router) {}
   onClick(topic: DashboardTopic) {
+    console.log("landing", topic)
     this.router.navigate(APP_ROUTE_BUILDER.learn(topic.id));
   }
 }
