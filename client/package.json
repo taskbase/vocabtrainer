@@ -8,6 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "npm run generate && ng test",
     "generate": "npm run scss2json",
+    "get-schema": "echo \"(1) Vist `https://bitmark-api.taskbase.com/documentation` (2) hit download at the top (3) move `swagger.json` into the client folder. (4) run `npm run generate-types`\"",
+    "generate-types": "openapi-typescript swagger.json --output bitmark-api.openapi.d.ts",
     "scss2json": "node ./scss-to-typescript.js src/styles/variables.scss src/app/scss-variables.generated.ts"
   },
   "private": true,
@@ -20,6 +22,7 @@
     "@angular/platform-browser": "^15.2.0",
     "@angular/platform-browser-dynamic": "^15.2.0",
     "@angular/router": "^15.2.0",
+    "openapi-typescript": "^6.2.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"

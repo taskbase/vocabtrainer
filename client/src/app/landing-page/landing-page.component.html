@@ -6,23 +6,16 @@
     </tb-h3>
     <div class="landing-page-circles-wrapper">
       <div class="landing-page-circles">
-        <tb-progress-circle
-          [progress]="20"
-          icon="assets/img/icons/food.svg"
-          subtitle="Food & Drinks"
-        ></tb-progress-circle>
-        <tb-progress-circle
-          [progress]="80"
-          icon="assets/img/icons/work.svg"
-          subtitle="Work"
-        ></tb-progress-circle>
-        <tb-progress-circle
-          contentBackground="primary"
-          contentText="Start now"
-          icon="assets/img/icons/misc.svg"
-        ></tb-progress-circle>
+        <div *ngFor="let topic of topics" class="progress-circle">
+          <tb-progress-circle
+            (click)="onClick(topic)"
+            [progress]="topic.progress"
+            icon="assets/img/icons/{{ topic.icon }}.svg"
+            [subtitle]="topic.title"
+            [contentText]="topic.progress === 0 ? 'Start now' : null"
+          ></tb-progress-circle>
+        </div>
       </div>
     </div>
-    <tb-button> Study now </tb-button>
   </div>
 </div>
