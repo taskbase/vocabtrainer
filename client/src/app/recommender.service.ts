@@ -14,8 +14,13 @@ import { Bit } from './bitmark.model';
   providedIn: 'root',
 })
 export class RecommenderService {
+  masteryMock = {
+    FOOD_DRINKS: 0,
+    WORK: 0,
+  };
+
   readonly topics = ['FOOD_DRINKS', 'WORK', 'PRESENT_SIMPLE'];
-  readonly endpoint = `https://3e3d-188-155-167-220.eu.ngrok.io` + `/api`;
+  readonly endpoint = `https://dfb9-188-155-167-220.eu.ngrok.io` + `/api`;
   constructor(private http: HttpClient, private userService: UserService) {}
   recommendTask(topic: string): Observable<RecommendTaskResponse> {
     const user = this.userService.userId;
@@ -27,6 +32,14 @@ export class RecommenderService {
       `${this.endpoint}/task/recommend`,
       recommendTaskRequest
     );
+  }
+
+  adjustMastery(topic: 'FOOD_DRINKS' | 'WORK') {
+    const randomChange = 0.1 + Math.random() * 0.1;
+    this.masteryMock[topic] =
+      this.masteryMock[topic] > 0.9
+        ? 1
+        : this.masteryMock[topic] + randomChange;
   }
 
   feedback(bit: Bit): Observable<Bit> {
@@ -46,6 +59,7 @@ export class RecommenderService {
   }
 
   mastery(): Observable<any> {
-    return this.http.post<any>(`${this.endpoint}/mastery`, {});
+    return of(this.masteryMock);
+    // return this.http.post<any>(`${this.endpoint}/mastery`, {});
   }
 }

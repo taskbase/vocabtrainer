@@ -2,12 +2,22 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RecommenderService } from '../recommender.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Bit, BitType, ClozeBit, EssayBit } from '../bitmark.model';
+import {
+  Bit,
+  ClozeBit,
+  ClozeBitBodyGap,
+  EssayBit,
+  FeedbackItem,
+} from '../bitmark.model';
 import { ChatService } from '../taskbase-ui/chat.service';
 import { hackathonScript } from '../chat-hackathon-script';
 import { ChatMessage } from '../taskbase-ui/tb-chat-message-list/tb-chat-message-list.component';
 import { RecommendTaskResponse } from '../recommend.model';
-import { FINISHED_MESSAGES, SUCCESS_MESSAGES } from '../mocks';
+import {
+  FINISHED_MESSAGES,
+  MISTAKE_MESSAGES,
+  SUCCESS_MESSAGES,
+} from '../mocks';
 
 enum ChatState {
   INITIAL = 'INITIAL',
@@ -31,8 +41,6 @@ export class LearnPageComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   readonly thinkingMessage = `Thinking...`;
 
-  readonly successMessages = SUCCESS_MESSAGES;
-
   solvedTasksCounter = 0;
 
   state: ChatState = ChatState.INITIAL;
@@ -45,7 +53,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
   ];
 
   private scriptProgress: number = 0;
-  readonly taskLimit = 3;
+  readonly taskLimit = 2;
 
   constructor(
     private recommenderService: RecommenderService,
@@ -197,24 +205,42 @@ export class LearnPageComponent implements OnInit, OnDestroy {
       console.error('you are not here. NO!');
     }
     this.addThinkingMessage();
-    this.recommenderService
-      .feedbackMockCorrect(this.currentTask as Bit)
-      .subscribe({
-        next: (bit: any) => {
-          this.removeThinkingMessage();
-          const isCorrect = bit.feedback.every(
-            (feedback: any) => feedback.correctness === 'CORRECT'
+    this.recommenderService.feedback(this.currentTask as Bit).subscribe({
+      next: (bit: any) => {
+        this.removeThinkingMessage();
+
+        const feedback = bit.feedback as FeedbackItem[];
+
+        let allFeedbacks: FeedbackItem[] = [...feedback];
+
+        if (type === 'cloze') {
+          // the cloze tasks also have feedback on the gaps
+
+          const clozeBit: ClozeBit = bit;
+          const feedbacks: FeedbackItem[] = clozeBit.body
+            .filter((item) => item.type === 'gap')
+            .flatMap((item) => (item as ClozeBitBodyGap).feedback);
+          allFeedbacks = [...allFeedbacks, ...feedbacks];
+        }
+
+        const wrongFeedbacks = allFeedbacks.filter(
+          (item) => item.correctness !== 'CORRECT'
+        );
+        const isCorrect = wrongFeedbacks.length === 0;
+
+        if (isCorrect) {
+          this.recommenderService.adjustMastery(
+            this.topic as 'FOOD_DRINKS' | 'WORK'
           );
-          if (isCorrect) {
-            this.handleGoNext();
-          } else {
-            this.handleWrongAttempt(bit);
-          }
-        },
-        error: () => {
-          this.genericErrorHandler();
-        },
-      });
+          this.handleGoNext();
+        } else {
+          this.handleWrongAttempt(this.extractFeedbackMessage(wrongFeedbacks));
+        }
+      },
+      error: () => {
+        this.genericErrorHandler();
+      },
+    });
   }
 
   private handleGoNext(wasCorrect: boolean = true) {
@@ -223,7 +249,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
     if (wasCorrect) {
       this.addChatMessage({
         isTaskbase: true,
-        text: this.pickRandomElement(this.successMessages),
+        text: this.pickRandomElement(SUCCESS_MESSAGES),
       });
     }
     if (this.solvedTasksCounter < this.taskLimit) {
@@ -237,11 +263,27 @@ export class LearnPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  private handleWrongAttempt(bit: any) {
-    const firstFeedback = bit.feedback[0];
+  /**
+   * Extract the feedback message if it's usable, otherwise come up with something.
+   * */
+  private extractFeedbackMessage(feedbackList: FeedbackItem[]): string {
+    const maybeGoodFeedback = feedbackList.find(
+      (item) =>
+        !item.message.includes('sample solution') &&
+        !item.message.includes('keyword')
+    );
+
+    if (maybeGoodFeedback) {
+      return maybeGoodFeedback.message;
+    } else {
+      return this.pickRandomElement(MISTAKE_MESSAGES);
+    }
+  }
+
+  private handleWrongAttempt(feedbackMessage: string) {
     this.addChatMessage({
       isTaskbase: true,
-      text: firstFeedback.message,
+      text: feedbackMessage,
     });
     if (this.state === ChatState.DIFFICULTY4) {
       this.state = ChatState.DIFFICULTY3;
@@ -257,7 +299,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
       this.state = ChatState.DIFFICULTY2;
       this.addChatMessage({
         isTaskbase: true,
-        text: `Let me help you out here. Just give me the missing word.`,
+        text: `Let me help you out here. Fill in the gap.`,
       });
       const clozeBit = this.currentResponse?.bitmark.cloze as ClozeBit;
       this.currentTask = clozeBit;
@@ -287,15 +329,32 @@ export class LearnPageComponent implements OnInit, OnDestroy {
 
     this.addThinkingMessage();
 
-    this.recommenderService.recommendTaskMock(this.topic).subscribe({
-      error: () => {
-        this.genericErrorHandler();
-      },
-      next: (task) => {
-        this.removeThinkingMessage();
-        this.handleTaskReceived(task);
-      },
-    });
+    const currentTask = this.currentResponse;
+    const doFetch = (counter: number) => {
+      this.recommenderService.recommendTask(this.topic).subscribe({
+        error: () => {
+          this.genericErrorHandler();
+        },
+        next: (task) => {
+          const isExcluded =
+            task.bitmark.essay.instruction ===
+              currentTask?.bitmark.essay.instruction ||
+            task.bitmark.essay.sampleSolution.includes(
+              'He ordered one dinner'
+            ) ||
+            task.bitmark.essay.sampleSolution.includes('fruit');
+          if (isExcluded) {
+            if (counter < 2) {
+              doFetch(counter++);
+            }
+          } else {
+            this.removeThinkingMessage();
+            this.handleTaskReceived(task);
+          }
+        },
+      });
+    };
+    doFetch(0);
   }
 
   private addThinkingMessage() {
