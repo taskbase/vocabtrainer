@@ -150,3 +150,5 @@ export const FINISHED_MESSAGES = [
   'The session is over. Please return to the dashboard to start a new session.',
   "You've successfully finished the assignment. Time to head back to the dashboard to start a new session.",
 ];
+
+export const MISTAKE_MESSAGES = ['We detected a mistake in your solution.'];
