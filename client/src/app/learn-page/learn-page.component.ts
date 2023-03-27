@@ -10,7 +10,6 @@ import {
   FeedbackItem,
 } from '../bitmark.model';
 import { ChatService } from '../taskbase-ui/chat.service';
-import { hackathonScript } from '../chat-hackathon-script';
 import { ChatMessage } from '../taskbase-ui/tb-chat-message-list/tb-chat-message-list.component';
 import { RecommendTaskResponse } from '../recommend.model';
 import {
@@ -52,7 +51,6 @@ export class LearnPageComponent implements OnInit, OnDestroy {
     },
   ];
 
-  private scriptProgress: number = 0;
   readonly taskLimit = 2;
 
   constructor(
@@ -65,16 +63,11 @@ export class LearnPageComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         this.topic = params['topic'];
-
-        if (this.topic == 'ASSISTANT') {
-          this.handleAssistant();
-        } else {
-          this.subscriptions.push(
-            this.chatService.messageEvent.subscribe((text: string) => {
-              this.handleUserMessage(text);
-            })
-          );
-        }
+        this.subscriptions.push(
+          this.chatService.messageEvent.subscribe((text: string) => {
+            this.handleUserMessage(text);
+          })
+        );
       })
     );
   }
@@ -83,49 +76,11 @@ export class LearnPageComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
-  private handleAssistant() {
-    // Follow a scripted interaction for the hackathon
-    this.chatMessages = [];
-    this.scriptProgress = 0;
-    this.chatService.messageEvent.subscribe((text) => {
-      this.addChatMessage({
-        isTaskbase: false,
-        text: text,
-      });
-      setTimeout(() => this.advanceScript(), 1000);
-    });
-    this.advanceScript();
-  }
-
   private addChatMessage(chatMessage: ChatMessage) {
     this.chatMessages = [...this.chatMessages, chatMessage];
     setTimeout(() => {
       window.scrollTo(0, document.body.scrollHeight);
     }, 0);
-  }
-
-  private advanceScript() {
-    const [scriptElement, action] = hackathonScript[this.scriptProgress];
-
-    this.addChatMessage({
-      isTaskbase: true,
-      text: scriptElement,
-    });
-
-    // TODO: add some types and don't give different meanings to null and undefined
-    if (action === null) {
-      // Wait for user input
-      this.chatService.disabled.next(false);
-    } else if (typeof action === 'number') {
-      // Wait N seconds before advancing
-      this.chatService.disabled.next(true);
-      setTimeout(() => this.advanceScript(), action * 1000);
-    } else if (action === undefined) {
-      // End the chat session
-      this.chatService.disabled.next(true);
-    }
-
-    this.scriptProgress++;
   }
 
   private handleUserMessage(text: string) {
@@ -342,7 +297,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
             task.bitmark.essay.sampleSolution.includes(
               'He ordered one dinner'
             ) ||
-            task.bitmark.essay.sampleSolution.includes('fruit');
+            task.bitmark.essay.sampleSolution.includes('Fruit');
           if (isExcluded) {
             if (counter < 2) {
               doFetch(counter++);

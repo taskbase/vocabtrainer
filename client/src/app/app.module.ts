@@ -12,6 +12,7 @@ import { TbUiModule } from './taskbase-ui/tb-ui.module';
 import { UiDemoPageComponent } from './ui-demo-page/ui-demo-page.component';
 import { LearnPageComponent } from './learn-page/learn-page.component';
 import { HttpClientModule } from '@angular/common/http';
+import { AssistantPageComponent } from './assistant-page/assistant-page.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { HttpClientModule } from '@angular/common/http';
     LandingPageComponent,
     UiDemoPageComponent,
     LearnPageComponent,
+    AssistantPageComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, TbUiModule, HttpClientModule],
   providers: [],
