@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ChatMessage } from '../taskbase-ui/tb-chat-message-list/tb-chat-message-list.component';
 import { ChatService } from '../taskbase-ui/chat.service';
+import { Subscription } from 'rxjs';
 
 enum AssistantState {
   'TASKBASE_MESSAGE' = 'TASKBASE_MESSAGE',
@@ -102,25 +103,28 @@ export const hackathonScript: AssistantItem[] = [
   templateUrl: './assistant-page.component.html',
   styleUrls: ['./assistant-page.component.scss'],
 })
-export class AssistantPageComponent implements OnInit {
+export class AssistantPageComponent implements OnInit, OnDestroy {
   chatMessages: ChatMessage[] = [];
   scriptProgress = 0;
+  subscriptions: Subscription[] = [];
 
   constructor(private chatService: ChatService) {}
   ngOnInit() {
-    this.handleAssistant();
+    // Follow a scripted interaction for the hackathon
+    this.subscriptions.push(
+      this.chatService.messageEvent.subscribe((text) => {
+        this.addChatMessage({
+          isTaskbase: false,
+          text: text,
+        });
+        setTimeout(() => this.advanceScript(), 1000);
+      })
+    );
+    this.advanceScript();
   }
 
-  private handleAssistant() {
-    // Follow a scripted interaction for the hackathon
-    this.chatService.messageEvent.subscribe((text) => {
-      this.addChatMessage({
-        isTaskbase: false,
-        text: text,
-      });
-      setTimeout(() => this.advanceScript(), 1000);
-    });
-    this.advanceScript();
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   private advanceScript() {
