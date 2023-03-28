@@ -1,13 +1,22 @@
 # Vocitrainer backend
 
-# Install
+# Run via docker
+
+Set the proper env variables inside of `./docker/docker-compose.yml` and then run:
+
+```shell
+cd docker
+docker-compose up
+```
+
+# Install and run on host
 
 ```shell
 pip3 install -r .
 ```
 
 
-# Run
+## Run
 First make sure you export the following variables, s.t. the server can pick it up
 ```shell
 export api_key="<your key>"
