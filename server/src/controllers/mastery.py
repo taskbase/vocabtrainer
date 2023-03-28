@@ -35,12 +35,6 @@ def all_masteries():
 
     return response.json()
 
-
-# @router.get("/api/competences")
-# def get_competences():
-#     return all_competences()
-
-
 def get_mastery_for_topic(topic: str, masteries: any):
     def sigmoid(x):
         return 1.0 / (1.0 + np.exp(-x))

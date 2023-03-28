@@ -106,12 +106,15 @@ def recommend_task(request: RecommendRequest):
 
     to_return = None
 
-    while True:
+    for i in range(10):
         index = random.randint(0, len(words) - 1)
         word = words[index]
         res = get_task(word)
         if len(res) > 0:
             to_return = res[0]
             break
+
+    if to_return is None:
+        raise HTTPException(status_code=500, detail=f"Failed to recommend task. Please try again.")
 
     return to_return
