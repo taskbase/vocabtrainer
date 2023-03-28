@@ -1,7 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Response
 from typing import Any, Dict
 from settings import settings
 import httpx
+import numpy as np
 
 from .task import topics
 
@@ -17,9 +18,11 @@ def all_competences():
     return response.json()
 
 
-competences = all_competences()
+# initial computation is disabled, as for the MVP we don't connect to the analytics engine.
+# competences = all_competences()
+# word_competence_id_map = dict(map(lambda c: (c["name"].lower(), c["id"]), all_competences()))
 
-word_competence_id_map = dict(map(lambda c: (c["name"].lower(), c["id"]), all_competences()))
+word_competence_id_map = {}
 
 
 def all_masteries():
@@ -39,29 +42,31 @@ def get_competences():
 
 
 def get_mastery_for_topic(topic: str, masteries: any):
+    def sigmoid(x):
+        return 1.0 / (1.0 + np.exp(-x))
+
     words = topics[topic]
-
-    mastery = 0
-
     len_words = len(words)
+    mastery = 0
 
     for word in words:
         try:
             competence_id = str(word_competence_id_map[word.lower()])
-            mastery = mastery + (masteries[competence_id] or 0)
-        except:
+
+            mastery = mastery + sigmoid(masteries[competence_id] or 0)
+        except Exception as e:
+            print(e)
             # Skip this word
             len_words = len_words - 1
 
     return mastery / len_words
 
 
-@router.get("/api/mastery")
+@router.post("/api/mastery")
 def get_masteries():
     masteries = all_masteries()
 
     print(masteries)
-    print(word_competence_id_map)
 
     return {
         "FOOD_DRINKS": get_mastery_for_topic("FOOD_DRINKS", masteries),

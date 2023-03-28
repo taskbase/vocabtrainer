@@ -75,7 +75,7 @@ topics = {
     ]
 }
 
-user_stats = []
+used_words = {}
 
 
 class RecommendRequest(BaseModel):
@@ -90,8 +90,9 @@ def get_task(word: str, exercise_type: str = "all"):
 
     try:
         return httpx.get(url).json()
-    except:
-        return None
+    except Exception as e:
+        print(f"got exception reading from taskpool: {e} for word {word}")
+        return []
 
 
 @router.get("/api/task/overview/")
@@ -104,12 +105,18 @@ def recommend_task(request: RecommendRequest):
     words = []
     try:
         words = topics[request.topic]
-    except:
+    except Exception as e:
+        print(e)
         raise HTTPException(status_code=400, detail=f"Topic '{request.topic}' not supported")
 
-    index = random.randint(0, len(words) - 1)
-    word = words[index]
+    to_return = None
 
-    print(get_task(word))
-    # TODO: select a certain index
-    return get_task(word)[0]
+    while True:
+        index = random.randint(0, len(words) - 1)
+        word = words[index]
+        res = get_task(word)
+        if len(res) > 0:
+            to_return = res[0]
+            break
+
+    return to_return
