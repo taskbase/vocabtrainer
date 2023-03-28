@@ -106,7 +106,7 @@ def recommend_task(request: RecommendRequest):
 
     to_return = None
 
-    for i in range(10):
+    for _ in range(10):
         index = random.randint(0, len(words) - 1)
         word = words[index]
         res = get_task(word)
