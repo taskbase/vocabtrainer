@@ -95,11 +95,6 @@ def get_task(word: str, exercise_type: str = "all"):
         return []
 
 
-@router.get("/api/task/overview/")
-def get_task_overview():
-    return topics
-
-
 @router.post("/api/task/recommend")
 def recommend_task(request: RecommendRequest):
     words = []

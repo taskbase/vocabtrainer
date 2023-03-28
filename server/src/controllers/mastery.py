@@ -36,9 +36,9 @@ def all_masteries():
     return response.json()
 
 
-@router.get("/api/competences")
-def get_competences():
-    return all_competences()
+# @router.get("/api/competences")
+# def get_competences():
+#     return all_competences()
 
 
 def get_mastery_for_topic(topic: str, masteries: any):
@@ -62,14 +62,14 @@ def get_mastery_for_topic(topic: str, masteries: any):
     return mastery / len_words
 
 
-@router.post("/api/mastery")
-def get_masteries():
-    masteries = all_masteries()
-
-    print(masteries)
-
-    return {
-        "FOOD_DRINKS": get_mastery_for_topic("FOOD_DRINKS", masteries),
-        "WORK": get_mastery_for_topic("WORK", masteries),
-        "PRESENT_SIMPLE": get_mastery_for_topic("PRESENT_SIMPLE", masteries)
-    }
+# @router.post("/api/mastery")
+# def get_masteries():
+#     masteries = all_masteries()
+#
+#     print(masteries)
+#
+#     return {
+#         "FOOD_DRINKS": get_mastery_for_topic("FOOD_DRINKS", masteries),
+#         "WORK": get_mastery_for_topic("WORK", masteries),
+#         "PRESENT_SIMPLE": get_mastery_for_topic("PRESENT_SIMPLE", masteries)
+#     }
