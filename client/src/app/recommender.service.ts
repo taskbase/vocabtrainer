@@ -20,7 +20,8 @@ export class RecommenderService {
   };
 
   readonly topics = ['FOOD_DRINKS', 'WORK', 'PRESENT_SIMPLE'];
-  readonly endpoint = `http://localhost:51337` + `/api`;
+  readonly endpoint =
+    `https://7692-2a04-ee41-4-a5a7-8198-a94d-c087-8e7b.eu.ngrok.io` + `/api`;
   constructor(private http: HttpClient, private userService: UserService) {}
   recommendTask(topic: string): Observable<RecommendTaskResponse> {
     const user = this.userService.userId;
