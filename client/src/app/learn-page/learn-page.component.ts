@@ -29,6 +29,12 @@ enum ChatState {
   FINISHED = 'FINISHED',
 }
 
+enum TaskType {
+  ESSAY = 'ESSAY',
+  AUDIO = 'AUDIO',
+  CLOZE = 'CLOZE',
+}
+
 @Component({
   selector: 'app-learn-page',
   templateUrl: './learn-page.component.html',
@@ -119,13 +125,13 @@ export class LearnPageComponent implements OnInit, OnDestroy {
         this.fetchNextTask();
       },
       [ChatState.DIFFICULTY4]: () => {
-        this.handleAttempt(text, 'essay');
+        this.handleAttempt(text, TaskType.ESSAY);
       },
       [ChatState.DIFFICULTY3]: () => {
-        this.handleAttempt(text, 'audio');
+        this.handleAttempt(text, TaskType.AUDIO);
       },
       [ChatState.DIFFICULTY2]: () => {
-        this.handleAttempt(text, 'cloze');
+        this.handleAttempt(text, TaskType.CLOZE);
       },
       [ChatState.DIFFICULTY1]: () => {
         this.addChatMessage({
@@ -144,14 +150,15 @@ export class LearnPageComponent implements OnInit, OnDestroy {
     handlers[this.state]();
   }
 
-  private handleAttempt(text: string, type: 'essay' | 'cloze' | 'audio') {
-    const typeHandlers = {
-      essay: () => ((this.currentTask as EssayBit).answer.text = text),
-      audio: () => {
+  private handleAttempt(text: string, type: TaskType) {
+    const typeHandlers: Record<TaskType, () => void> = {
+      [TaskType.ESSAY]: () =>
+        ((this.currentTask as EssayBit).answer.text = text),
+      [TaskType.AUDIO]: () => {
         (this.currentTask as EssayBit).answer.text = text;
         (this.currentTask as EssayBit).feedbackEngine.feedbackId += `-audio`;
       },
-      cloze: () => {
+      [TaskType.CLOZE]: () => {
         // Assumption: there is only one gap. This is satisfied by tasks from the taskpool.
         const gap = (this.currentTask as ClozeBit).body.find(
           (elt) => elt.type === 'gap'
@@ -170,7 +177,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
 
         let allFeedbacks: FeedbackItem[] = [...feedback];
 
-        if (type === 'cloze') {
+        if (type === TaskType.CLOZE) {
           // the cloze tasks also have feedback on the gaps
 
           const clozeBit: ClozeBit = bit;
