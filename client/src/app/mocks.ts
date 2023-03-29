@@ -160,4 +160,5 @@ export const SERVER_ERRORS = [
   `Give me a break please. (server error)`,
   `Can you think about something easier? (server error)`,
   `1+1 = 226662552 (server error)`,
+  `I'm sorry Dave. I'm afraid I can't do that. (server error)`,
 ];
