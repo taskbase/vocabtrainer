@@ -98,7 +98,7 @@ function feedbackFactory(correctness: 'CORRECT' | 'WRONG') {
     feedbackEngine: {
       feedbackId: 'fb182030db4e218d5708642beb33cf25-essay',
       tenantId: 99,
-      userId: 'XXXXXX',
+      userId: 'example@taskbase.com',
       timeOnTask: 0,
     },
     meta: { language: 'de', learningLanguage: 'en', subject: 'oil' },

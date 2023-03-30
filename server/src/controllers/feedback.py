@@ -3,6 +3,7 @@ from typing import Any, Dict
 
 from settings import settings
 import httpx
+import os
 
 router = APIRouter()
 
@@ -15,7 +16,7 @@ def compute_feedback(request: dict):
     request["feedbackEngine"]["tenantId"] = settings.tenant_id
     # Nasty hack as the analytics engine only returns masteries for this user
     # Note: the bearer token used to request from the analytics engine needs to belong to this user
-    request["feedbackEngine"]["userId"] = "XXXXXX"
+    request["feedbackEngine"]["userId"] = os.environ.get('VOCABTRAINER_USER')
 
     response = httpx.post(url=url, headers=headers, json=request)
 
@@ -29,7 +30,7 @@ def compute_feedback(request: dict):
 #         },
 #         "feedbackEngine": {
 #             "feedbackId": f"{task_id}",
-#             "userId": "XXXXXX",
+#             "userId": "<user id>",
 #             "tenantId": "99",
 #             "timeOnTask": 0
 #         },
