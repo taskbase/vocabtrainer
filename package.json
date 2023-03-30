@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/taskbase/vocitrainer.git"
+    "url": "git+https://github.com/taskbase/vocabtrainer.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/taskbase/vocitrainer/issues"
+    "url": "https://github.com/taskbase/vocabtrainer/issues"
   },
-  "homepage": "https://github.com/taskbase/vocitrainer#readme",
+  "homepage": "https://github.com/taskbase/vocabtrainer#readme",
   "devDependencies": {
     "husky": "^8.0.3",
     "prettier": "^2.8.5",
