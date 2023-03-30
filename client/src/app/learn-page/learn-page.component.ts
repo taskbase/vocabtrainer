@@ -10,12 +10,12 @@ import {
   FeedbackItem,
 } from '../bitmark.model';
 import { ChatService } from '../taskbase-ui/chat.service';
-import { hackathonScript } from '../chat-hackathon-script';
 import { ChatMessage } from '../taskbase-ui/tb-chat-message-list/tb-chat-message-list.component';
 import { RecommendTaskResponse } from '../recommend.model';
 import {
   FINISHED_MESSAGES,
   MISTAKE_MESSAGES,
+  SERVER_ERRORS,
   SUCCESS_MESSAGES,
 } from '../mocks';
 
@@ -27,6 +27,12 @@ enum ChatState {
   DIFFICULTY2 = 'DIFFICULTY2',
   DIFFICULTY1 = 'DIFFICULTY1',
   FINISHED = 'FINISHED',
+}
+
+enum TaskType {
+  ESSAY = 'ESSAY',
+  AUDIO = 'AUDIO',
+  CLOZE = 'CLOZE',
 }
 
 @Component({
@@ -52,7 +58,6 @@ export class LearnPageComponent implements OnInit, OnDestroy {
     },
   ];
 
-  private scriptProgress: number = 0;
   readonly taskLimit = 2;
 
   constructor(
@@ -65,16 +70,11 @@ export class LearnPageComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         this.topic = params['topic'];
-
-        if (this.topic == 'ASSISTANT') {
-          this.handleAssistant();
-        } else {
-          this.subscriptions.push(
-            this.chatService.messageEvent.subscribe((text: string) => {
-              this.handleUserMessage(text);
-            })
-          );
-        }
+        this.subscriptions.push(
+          this.chatService.messageEvent.subscribe((text: string) => {
+            this.handleUserMessage(text);
+          })
+        );
       })
     );
   }
@@ -83,49 +83,11 @@ export class LearnPageComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
-  private handleAssistant() {
-    // Follow a scripted interaction for the hackathon
-    this.chatMessages = [];
-    this.scriptProgress = 0;
-    this.chatService.messageEvent.subscribe((text) => {
-      this.addChatMessage({
-        isTaskbase: false,
-        text: text,
-      });
-      setTimeout(() => this.advanceScript(), 1000);
-    });
-    this.advanceScript();
-  }
-
   private addChatMessage(chatMessage: ChatMessage) {
     this.chatMessages = [...this.chatMessages, chatMessage];
     setTimeout(() => {
       window.scrollTo(0, document.body.scrollHeight);
     }, 0);
-  }
-
-  private advanceScript() {
-    const [scriptElement, action] = hackathonScript[this.scriptProgress];
-
-    this.addChatMessage({
-      isTaskbase: true,
-      text: scriptElement,
-    });
-
-    // TODO: add some types and don't give different meanings to null and undefined
-    if (action === null) {
-      // Wait for user input
-      this.chatService.disabled.next(false);
-    } else if (typeof action === 'number') {
-      // Wait N seconds before advancing
-      this.chatService.disabled.next(true);
-      setTimeout(() => this.advanceScript(), action * 1000);
-    } else if (action === undefined) {
-      // End the chat session
-      this.chatService.disabled.next(true);
-    }
-
-    this.scriptProgress++;
   }
 
   private handleUserMessage(text: string) {
@@ -163,13 +125,13 @@ export class LearnPageComponent implements OnInit, OnDestroy {
         this.fetchNextTask();
       },
       [ChatState.DIFFICULTY4]: () => {
-        this.handleAttempt(text, 'essay');
+        this.handleAttempt(text, TaskType.ESSAY);
       },
       [ChatState.DIFFICULTY3]: () => {
-        this.handleAttempt(text, 'essay-audio');
+        this.handleAttempt(text, TaskType.AUDIO);
       },
       [ChatState.DIFFICULTY2]: () => {
-        this.handleAttempt(text, 'cloze');
+        this.handleAttempt(text, TaskType.CLOZE);
       },
       [ChatState.DIFFICULTY1]: () => {
         this.addChatMessage({
@@ -188,22 +150,24 @@ export class LearnPageComponent implements OnInit, OnDestroy {
     handlers[this.state]();
   }
 
-  private handleAttempt(text: string, type: string) {
-    if (type === 'essay') {
-      (this.currentTask as EssayBit).answer.text = text;
-    } else if (type === 'essay-audio') {
-      (this.currentTask as EssayBit).answer.text = text;
-      (this.currentTask as EssayBit).feedbackEngine.feedbackId += `-audio`;
-    } else if (type === 'cloze') {
-      // Assumption: there is only one gap. This is satisfied by tasks from the taskpool.
-      const gap = (this.currentTask as ClozeBit).body.find(
-        (elt) => elt.type === 'gap'
-      );
-      (gap as any).answer.text = text;
-    } else {
-      // NEVER
-      console.error('you are not here. NO!');
-    }
+  private handleAttempt(text: string, type: TaskType) {
+    const typeHandlers: Record<TaskType, () => void> = {
+      [TaskType.ESSAY]: () =>
+        ((this.currentTask as EssayBit).answer.text = text),
+      [TaskType.AUDIO]: () => {
+        (this.currentTask as EssayBit).answer.text = text;
+        (this.currentTask as EssayBit).feedbackEngine.feedbackId += `-audio`;
+      },
+      [TaskType.CLOZE]: () => {
+        // Assumption: there is only one gap. This is satisfied by tasks from the taskpool.
+        const gap = (this.currentTask as ClozeBit).body.find(
+          (elt) => elt.type === 'gap'
+        );
+        (gap as any).answer.text = text;
+      },
+    };
+    typeHandlers[type]();
+
     this.addThinkingMessage();
     this.recommenderService.feedback(this.currentTask as Bit).subscribe({
       next: (bit: any) => {
@@ -213,7 +177,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
 
         let allFeedbacks: FeedbackItem[] = [...feedback];
 
-        if (type === 'cloze') {
+        if (type === TaskType.CLOZE) {
           // the cloze tasks also have feedback on the gaps
 
           const clozeBit: ClozeBit = bit;
@@ -342,7 +306,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
             task.bitmark.essay.sampleSolution.includes(
               'He ordered one dinner'
             ) ||
-            task.bitmark.essay.sampleSolution.includes('fruit');
+            task.bitmark.essay.sampleSolution.includes('Fruit');
           if (isExcluded) {
             if (counter < 2) {
               doFetch(counter++);
@@ -375,12 +339,6 @@ export class LearnPageComponent implements OnInit, OnDestroy {
         text: chosenTask.instruction,
       });
     }
-    // if (chosenTask.resource?.audio?.src) {
-    //   this.addChatMessage({
-    //     isTaskbase: true,
-    //     audio: chosenTask.resource?.audio?.src,
-    //   });
-    // }
     this.chatService.disabled.next(false);
   }
 
@@ -396,14 +354,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
   private genericErrorHandler() {
     this.addChatMessage({
       isTaskbase: true,
-      text: this.pickRandomElement([
-        `Man, this server really isn't working today. I wonder who's fault it is?`,
-        `Lol, server fault`,
-        `I'm feeling sleepy, not answering this today. (server error)`,
-        `Give me a break please. (server error)`,
-        `Can you think about something easier? (server error)`,
-        `1+1 = 226662552 (server error)`,
-      ]),
+      text: this.pickRandomElement(SERVER_ERRORS),
     });
     this.removeThinkingMessage();
     this.chatService.disabled.next(false);
