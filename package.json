@@ -1,5 +1,6 @@
 {
-  "name": "vocitrainer",
+  "name": "vocabtrainer",
+  "private": true,
   "version": "1.0.0",
   "description": "Vocitrainer is a chatbot-like app to study vocabulary.",
   "main": "index.js",
