@@ -1,6 +1,6 @@
-# Vocitrainer
+# Vocabtrainer
 
-Vocitrainer is a chatbot-like app to study vocabulary.
+Vocitrainer is a chatbot-like app to study vocabulary. Was started at the `#bitmark hackathon 2023` and continued now from there.
 
 ## Development
 
