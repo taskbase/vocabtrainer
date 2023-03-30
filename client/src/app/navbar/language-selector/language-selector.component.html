@@ -6,8 +6,8 @@
     (click)="selectLang(lang)"
   >
     <ng-container [ngSwitch]="lang">
-      <app-language-en *ngSwitchCase="languageEnum.EN"></app-language-en>
-      <app-language-de *ngSwitchCase="languageEnum.DE"></app-language-de>
+      <app-language-en *ngSwitchCase="languageEnum.EN" />
+      <app-language-de *ngSwitchCase="languageEnum.DE" />
     </ng-container>
   </button>
 </div>

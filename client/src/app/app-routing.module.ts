@@ -4,11 +4,13 @@ import { APP_ROUTE_PATHS } from './routes';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { UiDemoPageComponent } from './ui-demo-page/ui-demo-page.component';
 import { LearnPageComponent } from './learn-page/learn-page.component';
+import { AssistantPageComponent } from './assistant-page/assistant-page.component';
 
 const routes: Routes = [
   { path: APP_ROUTE_PATHS.root, component: LandingPageComponent },
   { path: APP_ROUTE_PATHS.uiDemo, component: UiDemoPageComponent },
   { path: APP_ROUTE_PATHS.learn, component: LearnPageComponent },
+  { path: APP_ROUTE_PATHS.assistant, component: AssistantPageComponent },
   { path: '**', redirectTo: '' },
 ];
 

@@ -152,3 +152,13 @@ export const FINISHED_MESSAGES = [
 ];
 
 export const MISTAKE_MESSAGES = ['We detected a mistake in your solution.'];
+
+export const SERVER_ERRORS = [
+  `Man, this server really isn't working today. I wonder who's fault it is?`,
+  `Lol, server fault`,
+  `I'm feeling sleepy, not answering this today. (server error)`,
+  `Give me a break please. (server error)`,
+  `Can you think about something easier? (server error)`,
+  `1+1 = 226662552 (server error)`,
+  `I'm sorry Dave. I'm afraid I can't do that. (server error)`,
+];

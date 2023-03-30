@@ -15,17 +15,17 @@
   <ng-container
     *ngIf="icon != null && (iconPosition === 'left' || iconPosition === 'fab')"
   >
-    <ng-container *ngTemplateOutlet="iconTemplate"></ng-container>
+    <ng-container *ngTemplateOutlet="iconTemplate" />
   </ng-container>
   <span class="text-label child" *ngIf="iconPosition !== 'fab'">
-    <ng-content></ng-content>
+    <ng-content />
   </span>
   <ng-container *ngIf="icon != null && iconPosition === 'right'">
-    <ng-container *ngTemplateOutlet="iconTemplate"></ng-container>
+    <ng-container *ngTemplateOutlet="iconTemplate" />
   </ng-container>
 </button>
 <ng-template #iconTemplate>
   <span class="icon child">
-    <tb-icon [icon]="icon" [scale]="buttonProps.iconScale"></tb-icon>
+    <tb-icon [icon]="icon" [scale]="buttonProps.iconScale" />
   </span>
 </ng-template>
