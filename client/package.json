@@ -4,7 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "npm run generate && ng serve --disable-host-check",
-    "build": "npm run generate && ng build",
+    "build:prod": "npm run generate && ng build --configuration prod",
+    "build:staging": "npm run generate && ng build --configuration dev",
+    "build:dev": "npm run generate && ng build --configuration staging",
     "watch": "ng build --watch --configuration development",
     "test": "npm run generate && ng test",
     "generate": "npm run scss2json",
