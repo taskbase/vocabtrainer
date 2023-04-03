@@ -9,6 +9,7 @@ import {
 } from './mocks';
 import { RecommendTaskRequest, RecommendTaskResponse } from './recommend.model';
 import { Bit } from './bitmark.model';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +21,7 @@ export class RecommenderService {
   };
 
   readonly topics = ['FOOD_DRINKS', 'WORK', 'PRESENT_SIMPLE'];
-  readonly endpoint =
-    `https://7692-2a04-ee41-4-a5a7-8198-a94d-c087-8e7b.eu.ngrok.io` + `/api`;
+  readonly endpoint = `${environment.apiUrl}/api`;
   constructor(private http: HttpClient, private userService: UserService) {}
   recommendTask(topic: string): Observable<RecommendTaskResponse> {
     const user = this.userService.userId;
