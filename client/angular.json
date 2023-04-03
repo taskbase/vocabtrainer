@@ -111,6 +111,12 @@
             "prod": {
               "browserTarget": "vocitrainer:build:prod"
             },
+            "dev": {
+              "browserTarget": "vocitrainer:build:dev"
+            },
+            "staging": {
+              "browserTarget": "vocitrainer:build:staging"
+            },
             "local": {
               "browserTarget": "vocitrainer:build:local"
             }
