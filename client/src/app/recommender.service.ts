@@ -21,7 +21,7 @@ export class RecommenderService {
   };
 
   readonly topics = ['FOOD_DRINKS', 'WORK', 'PRESENT_SIMPLE'];
-  readonly endpoint = `${environment.apiUrl}/api`;
+  readonly endpoint = `${environment.apiUrl}`;
   constructor(private http: HttpClient, private userService: UserService) {}
   recommendTask(topic: string): Observable<RecommendTaskResponse> {
     const user = this.userService.userId;
