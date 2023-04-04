@@ -1,26 +1,27 @@
 version: "3"
+# OPTIMIZE: use docker compose instead of `run-locally.sh`
 
-services:
-  vocitrainer-dev:
-    build:
-      context: $PWD/../../
-      dockerfile: $PWD/Dockerfile
-    ports:
-      - "51337:51337"
-    environment:
-      PYTHONPATH: ./src
-      analytics_api_url: "http://localhost:10000"
-      feedback_api_url: "http://localhost:8000"
-      api_key: "<your-key>"
-      tenant_id: "<your-tenant>"
-
-    command:
-      [
-        "uvicorn",
-        "main:app",
-        "--host",
-        "0.0.0.0",
-        "--port",
-        "51337",
-        "--reload",
-      ]
+#services:
+#  vocitrainer-dev:
+#    build:
+#      context: $PWD/../
+#      dockerfile: $PWD/Dockerfile
+#    ports:
+#      - "51337:51337"
+#    environment:
+#      PYTHONPATH: ./src
+#      analytics_api_url: "http://localhost:10000"
+#      feedback_api_url: "https://dev-api.taskbase.com"
+#      api_key: "xxx"
+#      tenant_id: "99"
+#
+#    command:
+#      [
+#        "uvicorn",
+#        "main:app",
+#        "--host",
+#        "0.0.0.0",
+#        "--port",
+#        "51337",
+#        "--reload",
+#      ]
