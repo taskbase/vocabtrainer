@@ -1,9 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from typing import Any, Dict
 
 from settings import settings
 import httpx
-import os
 
 router = APIRouter()
 
@@ -16,11 +15,15 @@ def compute_feedback(request: dict):
     request["feedbackEngine"]["tenantId"] = settings.tenant_id
     # Nasty hack as the analytics engine only returns masteries for this user
     # Note: the bearer token used to request from the analytics engine needs to belong to this user
-    request["feedbackEngine"]["userId"] = os.environ.get('VOCABTRAINER_USER')
+    request["feedbackEngine"]["userId"] = settings.vocabtrainer_user
 
     response = httpx.post(url=url, headers=headers, json=request)
 
-    return response.json()
+    json_response = response.json()
+    if not (200 <= response.status_code < 300):
+        raise HTTPException(status_code=response.status_code, detail=json_response)
+    return json_response
+
 
 
 # def get_fake_task_request(task_id: str, message: str):
