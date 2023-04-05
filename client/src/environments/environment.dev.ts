@@ -1,3 +1,3 @@
 export const environment = {
-  apiUrl: 'https://dev-vocabtrainer-api.taskbase.com/api',
+  apiUrl: 'https://dev-vocabtrainer-backend.taskbase.com/api',
 };
