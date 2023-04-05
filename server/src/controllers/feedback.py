@@ -1,5 +1,8 @@
+import json
+
 from fastapi import APIRouter, HTTPException
 from typing import Any, Dict
+from fastapi.logger import logger
 
 from settings import settings
 import httpx
@@ -19,7 +22,11 @@ def compute_feedback(request: dict):
 
     response = httpx.post(url=url, headers=headers, json=request)
 
-    json_response = response.json()
+    try:
+        json_response = response.json()
+    except json.decoder.JSONDecodeError as e:
+        logger.error(f"The result returned from the feedback API was not a valid JSON: {str(e)}")
+        raise HTTPException(status_code=500, detail="The result returned from the feedback API was not a JSON.")
     if not (200 <= response.status_code < 300):
         raise HTTPException(status_code=response.status_code, detail=json_response)
     return json_response
