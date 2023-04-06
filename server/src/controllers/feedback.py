@@ -20,7 +20,8 @@ def compute_feedback(request: dict):
     # Note: the bearer token used to request from the analytics engine needs to belong to this user
     request["feedbackEngine"]["userId"] = settings.vocabtrainer_user
 
-    response = httpx.post(url=url, headers=headers, json=request)
+    timeout = httpx.Timeout(connect=10.0, read=30.0)
+    response = httpx.post(url=url, headers=headers, json=request, timeout=timeout)
 
     try:
         json_response = response.json()
