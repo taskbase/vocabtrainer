@@ -3,8 +3,10 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from controllers import router
+from custom_logging import setup_logging
 
 app = FastAPI()
+setup_logging()
 
 app.add_middleware(
     CORSMiddleware,
