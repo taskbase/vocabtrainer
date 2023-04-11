@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RecommenderService } from '../recommender.service';
 import { ActivatedRoute } from '@angular/router';
-import {combineLatest, forkJoin, Subscription} from 'rxjs';
+import { combineLatest, forkJoin, Subscription } from 'rxjs';
 import {
   Bit,
   ClozeBit,
@@ -171,7 +171,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
     this.addThinkingMessage();
     forkJoin([
       this.recommenderService.offTopicFilter(text),
-      this.recommenderService.feedback(this.currentTask as Bit)
+      this.recommenderService.feedback(this.currentTask as Bit),
     ]).subscribe({
       next: ([offTopic, bit]: [any, any]) => {
         this.removeThinkingMessage();
@@ -182,8 +182,8 @@ export class LearnPageComponent implements OnInit, OnDestroy {
           });
           this.addChatMessage({
             isTaskbase: true,
-            text: "Let's try one more time!"
-          })
+            text: "Let's try one more time!",
+          });
         } else {
           const feedback = bit.feedback as FeedbackItem[];
 
@@ -209,14 +209,16 @@ export class LearnPageComponent implements OnInit, OnDestroy {
             );
             this.handleGoNext();
           } else {
-            this.handleWrongAttempt(this.extractFeedbackMessage(wrongFeedbacks));
+            this.handleWrongAttempt(
+              this.extractFeedbackMessage(wrongFeedbacks)
+            );
           }
         }
       },
       error: () => {
         this.genericErrorHandler();
-      }
-    })
+      },
+    });
   }
 
   private handleGoNext(wasCorrect: boolean = true) {

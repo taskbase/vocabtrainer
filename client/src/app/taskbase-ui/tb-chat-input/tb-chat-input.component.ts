@@ -1,4 +1,11 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ChatService } from '../chat.service';
 import { Subscription } from 'rxjs';
 
@@ -12,7 +19,7 @@ export class TbChatInputComponent implements OnInit, OnDestroy, AfterViewInit {
   autoFocus: boolean = true;
   disabled = false;
 
-  @ViewChild("userInput")
+  @ViewChild('userInput')
   inputElement: ElementRef | undefined;
 
   subscriptions: Subscription[] = [];
@@ -21,8 +28,7 @@ export class TbChatInputComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     this.chatService.disabled.subscribe((isDisabled) => {
       this.disabled = isDisabled;
-      if(!isDisabled) {
-        // why is this not always working?
+      if (!isDisabled) {
         this.focus();
       }
     });
