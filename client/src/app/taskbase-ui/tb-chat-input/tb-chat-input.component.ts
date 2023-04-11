@@ -43,9 +43,11 @@ export class TbChatInputComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   focus() {
-    setTimeout(() => {
-      this.inputElement?.nativeElement.focus();
-    }, 0);
+    if (this.autoFocus) {
+      setTimeout(() => {
+        this.inputElement?.nativeElement.focus();
+      }, 0);
+    }
   }
 
   onEnter() {
