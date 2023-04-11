@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RecommenderService } from '../recommender.service';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import {combineLatest, forkJoin, Subscription} from 'rxjs';
 import {
   Bit,
   ClozeBit,
@@ -54,7 +54,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
   chatMessages: ChatMessage[] = [
     {
       isTaskbase: true,
-      text: 'Hi! I am Amber, your English teacher. I have prepared a learning session of about 10 minutes. Are you ready?',
+      text: 'Hi! I am Amber, your English teacher. I have prepared a learning session of about 3 minutes. Are you ready?',
     },
   ];
 
@@ -169,42 +169,54 @@ export class LearnPageComponent implements OnInit, OnDestroy {
     typeHandlers[type]();
 
     this.addThinkingMessage();
-    this.recommenderService.feedback(this.currentTask as Bit).subscribe({
-      next: (bit: any) => {
+    forkJoin([
+      this.recommenderService.offTopicFilter(text),
+      this.recommenderService.feedback(this.currentTask as Bit)
+    ]).subscribe({
+      next: ([offTopic, bit]: [any, any]) => {
         this.removeThinkingMessage();
-
-        const feedback = bit.feedback as FeedbackItem[];
-
-        let allFeedbacks: FeedbackItem[] = [...feedback];
-
-        if (type === TaskType.CLOZE) {
-          // the cloze tasks also have feedback on the gaps
-
-          const clozeBit: ClozeBit = bit;
-          const feedbacks: FeedbackItem[] = clozeBit.body
-            .filter((item) => item.type === 'gap')
-            .flatMap((item) => (item as ClozeBitBodyGap).feedback);
-          allFeedbacks = [...allFeedbacks, ...feedbacks];
-        }
-
-        const wrongFeedbacks = allFeedbacks.filter(
-          (item) => item.correctness !== 'CORRECT'
-        );
-        const isCorrect = wrongFeedbacks.length === 0;
-
-        if (isCorrect) {
-          this.recommenderService.adjustMastery(
-            this.topic as 'FOOD_DRINKS' | 'WORK'
-          );
-          this.handleGoNext();
+        if (offTopic.length > 0) {
+          this.addChatMessage({
+            isTaskbase: true,
+            text: offTopic[0].message,
+          });
+          this.addChatMessage({
+            isTaskbase: true,
+            text: "Let's try one more time!"
+          })
         } else {
-          this.handleWrongAttempt(this.extractFeedbackMessage(wrongFeedbacks));
+          const feedback = bit.feedback as FeedbackItem[];
+
+          let allFeedbacks: FeedbackItem[] = [...feedback];
+
+          if (type === TaskType.CLOZE) {
+            // the cloze tasks also have feedback on the gaps
+            const clozeBit: ClozeBit = bit;
+            const feedbacks: FeedbackItem[] = clozeBit.body
+              .filter((item) => item.type === 'gap')
+              .flatMap((item) => (item as ClozeBitBodyGap).feedback);
+            allFeedbacks = [...allFeedbacks, ...feedbacks];
+          }
+
+          const wrongFeedbacks = allFeedbacks.filter(
+            (item) => item.correctness !== 'CORRECT'
+          );
+          const isCorrect = wrongFeedbacks.length === 0;
+
+          if (isCorrect) {
+            this.recommenderService.adjustMastery(
+              this.topic as 'FOOD_DRINKS' | 'WORK'
+            );
+            this.handleGoNext();
+          } else {
+            this.handleWrongAttempt(this.extractFeedbackMessage(wrongFeedbacks));
+          }
         }
       },
       error: () => {
         this.genericErrorHandler();
-      },
-    });
+      }
+    })
   }
 
   private handleGoNext(wasCorrect: boolean = true) {

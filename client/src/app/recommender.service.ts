@@ -47,6 +47,10 @@ export class RecommenderService {
     return this.http.post<Bit>(`${this.endpoint}/feedback/compute`, bit);
   }
 
+  offTopicFilter(message: string): Observable<Bit> {
+    return this.http.post<Bit>(`${this.endpoint}/feedback/off-topic-filter`, {message: message});
+  }
+
   recommendTaskMock(topic: string): Observable<RecommendTaskResponse> {
     return of(RECOMMEND_TASK_RESPONSE);
   }
