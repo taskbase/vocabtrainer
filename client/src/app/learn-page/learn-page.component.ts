@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RecommenderService } from '../recommender.service';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, forkJoin, Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import {
   Bit,
   ClozeBit,
