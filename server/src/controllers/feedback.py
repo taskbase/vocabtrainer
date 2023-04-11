@@ -57,7 +57,12 @@ def get_fake_task_request(task_id: str, message: str):
 @router.post("/api/feedback/off-topic-filter")
 def filters(request: dict):
     # general filter task
-    filter_task_id = "akYulFrAa5n6nUUBiHNyBD"
+    filter_task_id = settings.off_topic_filter_task
+
+    # skip if not configured
+    if filter_task_id == "":
+        return []
+
     remote_headers: Dict[str, Any] = {"Authorization": f"Bearer {settings.api_key}"}
     timeout = httpx.Timeout(30)
     try:
