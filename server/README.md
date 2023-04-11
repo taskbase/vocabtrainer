@@ -23,6 +23,7 @@ export api_key="<your key>"
 export tenant_id="<tenant_id, e.g. 99>"
 export analytics_api_url="<url, e.g. http://localhost:10000>"
 export feedback_api_url = "<url, e.g. http://localhost:60050>"
+export off_topic_filter_task= "<your task id>" # leave empty to ignore filters
 ```
 
 Where:
