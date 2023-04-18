@@ -267,7 +267,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
       this.state = ChatState.DIFFICULTY3;
       this.addChatMessage({
         isTaskbase: true,
-        text: `Almost there. Here's an audio, maybe this helps.`,
+        text: `Here's an audio, maybe this helps.`,
       });
       this.addChatMessage({
         isTaskbase: true,
