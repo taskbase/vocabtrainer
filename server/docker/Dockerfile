@@ -1,4 +1,4 @@
-FROM python:3.7.12-slim-buster
+FROM python:3.10.13-slim
 
 RUN apt -y update && apt -y upgrade && rm -rf /var/lib/apt/lists/*
 

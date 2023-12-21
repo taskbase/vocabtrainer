@@ -1,11 +1,13 @@
+import httpx
 import json
-
+import sys
 from fastapi import APIRouter, HTTPException
 from typing import Any, Dict
 from fastapi.logger import logger
+from os import path
 
+sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 from settings import settings
-import httpx
 
 router = APIRouter()
 
@@ -31,7 +33,6 @@ def compute_feedback(request: dict):
     if not (200 <= response.status_code < 300):
         raise HTTPException(status_code=response.status_code, detail=json_response)
     return json_response
-
 
 
 def get_fake_task_request(task_id: str, message: str):
@@ -66,7 +67,8 @@ def filters(request: dict):
     remote_headers: Dict[str, Any] = {"Authorization": f"Bearer {settings.api_key}"}
     timeout = httpx.Timeout(30)
     try:
-        response = httpx.post(url, headers=remote_headers, timeout=timeout, json=get_fake_task_request(filter_task_id, request["message"]))
+        response = httpx.post(url, headers=remote_headers, timeout=timeout,
+                              json=get_fake_task_request(filter_task_id, request["message"]))
         positive_feedback = list(filter(lambda f: f["correctness"] == "CORRECT", response.json()["feedback"]))
         return positive_feedback
     except Exception as e:

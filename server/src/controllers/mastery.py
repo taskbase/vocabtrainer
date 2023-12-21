@@ -35,6 +35,7 @@ def all_masteries():
 
     return response.json()
 
+
 def get_mastery_for_topic(topic: str, masteries: any):
     def sigmoid(x):
         return 1.0 / (1.0 + np.exp(-x))
@@ -54,7 +55,6 @@ def get_mastery_for_topic(topic: str, masteries: any):
             len_words = len_words - 1
 
     return mastery / len_words
-
 
 # @router.post("/api/mastery")
 # def get_masteries():
