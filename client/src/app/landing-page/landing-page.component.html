@@ -6,12 +6,12 @@
     </tb-h3>
     <div class="landing-page-circles-wrapper">
       <div class="landing-page-circles">
-        <div *ngFor="let topic of topics" class="progress-circle">
+        <div *ngFor="let chatbot of chatbots" class="progress-circle">
           <tb-progress-circle
-            (click)="onClick(topic)"
-            [progress]="topic.progress"
-            icon="assets/img/icons/{{ topic.icon }}.svg"
-            [subtitle]="topic.title"
+            (click)="onClick(chatbot)"
+            [progress]="0"
+            icon="assets/img/icons/food.svg"
+            [subtitle]="chatbot.name"
             [contentText]="null"
           />
         </div>
