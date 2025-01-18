@@ -12,7 +12,9 @@
       width="32"
       height="32"
     />
-    <div *ngIf="message.text">{{ message.text }}</div>
+    <div *ngIf="message.text">
+      <div *ngIf="formattedMessage" [innerHTML]="formattedMessage"></div>
+    </div>
     <div *ngIf="message.audio">
       <audio [src]="message.audio" controls></audio>
     </div>
