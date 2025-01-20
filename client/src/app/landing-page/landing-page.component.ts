@@ -11,6 +11,11 @@ import {Chatbot} from "../chatbase.model";
 })
 export class LandingPageComponent implements OnInit {
   chatbots: Chatbot[] = [];
+  icons: string[] = [
+    "assets/img/icons/food.svg",
+    "assets/img/icons/misc.svg",
+    "assets/img/icons/work.svg",
+  ]
 
   ngOnInit() {
     this.chatbaseService.getChatbots().subscribe((value: Chatbot[]) => {
@@ -26,5 +31,11 @@ export class LandingPageComponent implements OnInit {
 
   onClick(chatbot: Chatbot) {
     this.router.navigate(APP_ROUTE_BUILDER.learn(chatbot.id));
+  }
+
+  getIcon(chatbot: Chatbot): string {
+    // Choose a pseudo random icon
+    let randomNumber = chatbot.name.length > 0 ? chatbot.name.charCodeAt(0) : 0
+    return this.icons[randomNumber % this.icons.length];
   }
 }

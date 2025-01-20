@@ -1,5 +1,6 @@
 .idea
 .nvm
 node_modules
+vocabtrainer.iml
 
 __pycache__

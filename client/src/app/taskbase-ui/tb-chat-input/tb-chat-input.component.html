@@ -4,7 +4,7 @@
     [(ngModel)]="inputText"
     type="text"
     [placeholder]="disabled ? 'Thinking...' : 'Enter text here...'"
-    (keyup.enter)="onEnter()"
+    (keydown.enter)="onEnter()"
     #userInput
   />
 </div>

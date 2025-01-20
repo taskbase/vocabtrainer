@@ -10,7 +10,7 @@
           <tb-progress-circle
             (click)="onClick(chatbot)"
             [progress]="0"
-            icon="assets/img/icons/food.svg"
+            [icon]="getIcon(chatbot)"
             [subtitle]="chatbot.name"
             [contentText]="null"
           />
