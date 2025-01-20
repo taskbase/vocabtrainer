@@ -51,7 +51,13 @@ export class TbChatInputComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onEnter() {
-    this.chatService.messageEvent.next(this.inputText);
-    this.inputText = '';
+    if(!this.isNullOrEmpty(this.inputText)){
+      this.chatService.messageEvent.next(this.inputText);
+      this.inputText = '';
+    }
+  }
+
+  private isNullOrEmpty(str: string | null | undefined): boolean {
+    return !str || str.trim().length === 0;
   }
 }
