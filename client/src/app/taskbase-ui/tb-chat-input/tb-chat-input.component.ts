@@ -6,8 +6,8 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { ChatService } from '../chat.service';
-import { Subscription } from 'rxjs';
+import {ChatService} from '../chat.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'tb-chat-input',
@@ -23,7 +23,9 @@ export class TbChatInputComponent implements OnInit, OnDestroy, AfterViewInit {
   inputElement: ElementRef | undefined;
 
   subscriptions: Subscription[] = [];
-  constructor(private chatService: ChatService) {}
+
+  constructor(private chatService: ChatService) {
+  }
 
   ngOnInit() {
     this.chatService.disabled.subscribe((isDisabled) => {
@@ -51,7 +53,7 @@ export class TbChatInputComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onEnter() {
-    if(!this.isNullOrEmpty(this.inputText)){
+    if (!this.isNullOrEmpty(this.inputText)) {
       this.chatService.messageEvent.next(this.inputText);
       this.inputText = '';
     }
