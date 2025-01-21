@@ -20,7 +20,7 @@ class Chat(BaseModel):
     model: str
     conversationId: str
 
-@router.get("/api/chatbase/get-chatbots")
+@router.get("/api/chat/get-chatbots")
 def get_chatbots():
     headers = {"accept": "application/json", "Authorization": f"Bearer {settings.chatbase_api_key}"}
     timeout = httpx.Timeout(10)
@@ -30,7 +30,7 @@ def get_chatbots():
     chatbots = response.json()['chatbots']['data']
     return chatbots
 
-@router.post("/api/chatbase/chat")
+@router.post("/api/chat")
 def chat(request: Chat):
     headers = {"accept": "application/json", "Authorization": f"Bearer {settings.chatbase_api_key}"}
     timeout = httpx.Timeout(60)
@@ -42,4 +42,3 @@ def chat(request: Chat):
         return {"message": response_data["text"]}
     else:
         raise HTTPException(status_code=500, detail="Invalid response from external service")
-

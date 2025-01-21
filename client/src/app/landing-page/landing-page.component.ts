@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {APP_ROUTE_BUILDER} from '../routes';
-import {ChatbaseService} from "../chatbase.service";
-import {Chatbot} from "../chatbase.model";
+import {ChatBackendService} from "../chat-backend.service";
+import {Chatbot} from "../chat-backend.model";
 
 @Component({
   selector: 'app-landing-page',
@@ -25,7 +25,7 @@ export class LandingPageComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private chatbaseService: ChatbaseService
+    private chatbaseService: ChatBackendService
   ) {
   }
 

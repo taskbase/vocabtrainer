@@ -6,8 +6,8 @@ import {ChatMessage} from '../taskbase-ui/tb-chat-message-list/tb-chat-message-l
 import {
   SERVER_ERRORS,
 } from '../mocks';
-import {Chat, Chatbot, ChatResponse} from "../chatbase.model";
-import {ChatbaseService} from "../chatbase.service";
+import {Chat, Chatbot, ChatResponse} from "../chat-backend.model";
+import {ChatBackendService} from "../chat-backend.service";
 
 @Component({
   selector: 'app-learn-page',
@@ -28,7 +28,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private chatbaseService: ChatbaseService,
+    private chatBackendService: ChatBackendService,
     private chatService: ChatService
   ) {
   }
@@ -36,7 +36,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
-        this.chatbaseService.getChatbots().subscribe((chatbots: Chatbot[]) => {
+        this.chatBackendService.getChatbots().subscribe((chatbots: Chatbot[]) => {
             const chatBot = chatbots.find(chatbot => chatbot.id === params['chatbotId']);
             this.chat = {
               messages: [
@@ -84,7 +84,7 @@ export class LearnPageComponent implements OnInit, OnDestroy {
       text,
     });
     this.addThinkingMessage();
-    this.chatbaseService.chat(this.chat!!).subscribe({
+    this.chatBackendService.chat(this.chat!!).subscribe({
         next: (response: ChatResponse) => {
           this.chat?.messages.push({"content": response.message, role: "assistant"})
           this.removeThinkingMessage();
