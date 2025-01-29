@@ -39,21 +39,14 @@ export class LearnPageComponent implements OnInit, OnDestroy {
         this.chatBackendService.getChatbots().subscribe((chatbots: Chatbot[]) => {
             const chatBot = chatbots.find(chatbot => chatbot.id === params['chatbotId']);
             this.chat = {
-              messages: [
-                {"content": chatBot?.initial_messages[0], "role": "assistant"},
-              ],
+              messages: chatBot?.initial_messages?.map(message => ({content: message, role: "assistant"})) || [],
               chatbotId: params['chatbotId'],
               temperature: 0,
               model: "gpt-4o-mini",
               conversationId: new Date().toISOString(),
               stream: false
             };
-            this.chatMessages = [
-              {
-                isTaskbase: true,
-                text: chatBot?.initial_messages[0]
-              },
-            ];
+            this.chatMessages = chatBot?.initial_messages?.map(message => ({isTaskbase: true, text: message})) || [];
             this.subscriptions.push(
               this.chatService.messageEvent.subscribe((text: string) => {
                 this.handleUserMessage(text);

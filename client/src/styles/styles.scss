@@ -8,10 +8,6 @@
   box-sizing: border-box;
 }
 
-*::selection {
-  background-color: $tb-color-primary-50;
-}
-
 .app-unstyled-button {
   background: none;
   color: inherit;
