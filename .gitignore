@@ -2,5 +2,6 @@
 .nvm
 node_modules
 vocabtrainer.iml
-
 __pycache__
+venv
+server/src/task_index/
