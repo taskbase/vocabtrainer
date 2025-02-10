@@ -6,6 +6,7 @@ from langchain_core.tools import tool
 from langchain_openai import OpenAIEmbeddings
 import yake
 import random
+from aitutor.rag import get_rag_store
 
 from aitutor.models import Task
 
@@ -25,13 +26,11 @@ class UserTaskHistory:
         return id in self.data.get(user_id, set())
 
 
-embedding = OpenAIEmbeddings()
-rag_store = FAISS.load_local("task_index", embeddings=embedding, allow_dangerous_deserialization=True)
 history = UserTaskHistory()
 
 
 @tool(parse_docstring=True)
-def recommend_exercise_tool(topic: str, student_id: str) -> Optional[Task]:
+def recommend_exercise_tool(topic: str, student_id: str, tenant_ids: List[int]) -> Optional[Task]:
     """Recommends the most relevant exercise based on the given topic.
 
     This function searches for the most relevant exercise related to the provided topic
@@ -44,6 +43,7 @@ def recommend_exercise_tool(topic: str, student_id: str) -> Optional[Task]:
     Returns:
         Optional[Task]: The most relevant exercise if found, otherwise None.
     """
+    rag_store = get_rag_store(tenant_ids)
     docs = rag_store.similarity_search(query=topic, k=20)
     for doc in docs:
         # Extract the task

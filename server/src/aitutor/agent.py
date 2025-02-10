@@ -20,6 +20,7 @@ class ChatRequest(BaseModel):
 
 class State(TypedDict):
     messages: Annotated[list, add_messages]
+    tenant_ids: List[int]
 
 
 tools = [get_feedback_tool, recommend_exercise_tool, get_list_of_topics]
@@ -59,6 +60,8 @@ graph_builder.add_edge("tools", "chatbot")
 graph_builder.add_edge(START, "chatbot")
 graph = graph_builder.compile(checkpointer=memory)
 
+print(f"INITIALIZE GRAPH")
+
 system_prompt = (
     "You are an interactive AI tutor. You ask the student what they want to learn and challenge them with exercises. "
     "You provide feedback for the student's answers. "
@@ -68,10 +71,10 @@ system_prompt = (
     "Always respond in the same language as the exercises."
 )
 
-def ai_tutor_chat_call_inner(message: BaseMessage, user_config):
+def ai_tutor_chat_call_inner(message: BaseMessage, user_config, tenant_ids: Optional[List[int]]):
     """Handles user input and returns AI response."""
-    #user_message = message.content
-    print(f"message type: {message.type}")
+    if(tenant_ids):
+        graph.update_state(user_config, {"tenant_ids": tenant_ids})
     if message.type == "human":
         role = "user"
     else:
@@ -87,7 +90,7 @@ def ai_tutor_chat_call_inner(message: BaseMessage, user_config):
         response_messages.append(event["messages"][-1].content)
     return {"response": response_messages[-1] if response_messages else "No response generated."}
 
-def ai_tutor_chat_call(message: Message, user_id):
+def ai_tutor_chat_call(message: Message, user_id: str, tenant_ids: List[int]):
     user_config = {"configurable": {"thread_id": user_id}}
     snapshot = graph.get_state(user_config)
     print(f"snapshot: {snapshot}")
@@ -96,7 +99,7 @@ def ai_tutor_chat_call(message: Message, user_id):
     )
     if snapshot.values.get("messages") is None:
         print("STATE IS EMPTY!!")
-        ai_tutor_chat_call_inner(systemMessage, user_config)
+        ai_tutor_chat_call_inner(systemMessage, user_config, tenant_ids)
     return ai_tutor_chat_call_inner(HumanMessage(message.content), user_config)
 
 # def input_chat(user_input: str, role: str = "user"):

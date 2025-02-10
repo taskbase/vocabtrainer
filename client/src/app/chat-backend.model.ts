@@ -14,7 +14,8 @@ export interface Chat {
   stream: false,
   temperature: 0,
   model: "gpt-4o-mini",
-  conversationId: string
+  conversationId: string,
+  tenantIds: number[]
 }
 
 export interface ChatResponse {

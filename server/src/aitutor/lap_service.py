@@ -3,7 +3,7 @@ import requests
 from aitutor.models import Task
 from app_settings import settings
 
-def fetch_tasks(offset=0, limit=10, tenant_ids=None, task_types=None):
+def fetch_tasks(offset=0, limit=100, tenant_ids=None, task_types=None):
     """
     Fetch the tasks using the native LAP API.
     :param offset: Where to start.

@@ -19,6 +19,7 @@ class ChatRequest(BaseModel):
     temperature: float
     model: str
     conversationId: str
+    tenantIds: List[int]
 
 
 class ChatDefinition(BaseModel):
@@ -64,7 +65,7 @@ def get_chatbots():
 def chat(request: ChatRequest):
     if request.chatbotId == grammar_trainer.chatbotId:
         print(f"conversation id: {request.conversationId}")
-        response = ai_tutor_chat_call(request.messages[-1], request.conversationId)
+        response = ai_tutor_chat_call(request.messages[-1], request.conversationId, request.tenantIds)
         return {"message": response["response"]}
     else:
         headers = {"accept": "application/json", "Authorization": f"Bearer {settings.chatbase_api_key}"}
