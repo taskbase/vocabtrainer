@@ -35,6 +35,6 @@ Where:
 
 Then inside the `src` folder run
 ```shell
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uvicorn main:app --reload --host 0.0.0.0 --port 51337
 ```
 

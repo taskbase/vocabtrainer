@@ -1,14 +1,15 @@
 import json
+import random
+import logging
 from typing import Optional
 
-from langchain_community.vectorstores import FAISS
-from langchain_core.tools import tool
-from langchain_openai import OpenAIEmbeddings
 import yake
-import random
-from aitutor.rag import get_rag_store
-
+from aitutor.configuration import resolve_runnable_config_param
 from aitutor.models import Task
+from aitutor.rag import get_rag_store
+from langchain_core.runnables import RunnableConfig
+from langchain_core.tools import tool
+from aitutor.configuration import chat_config
 
 
 class UserTaskHistory:
@@ -30,7 +31,7 @@ history = UserTaskHistory()
 
 
 @tool(parse_docstring=True)
-def recommend_exercise_tool(topic: str, student_id: str, tenant_ids: List[int]) -> Optional[Task]:
+def recommend_exercise_tool(topic: str, config: RunnableConfig) -> Optional[Task]:
     """Recommends the most relevant exercise based on the given topic.
 
     This function searches for the most relevant exercise related to the provided topic
@@ -38,36 +39,46 @@ def recommend_exercise_tool(topic: str, student_id: str, tenant_ids: List[int]) 
 
     Args:
         topic (str): The topic for which a relevant exercise is needed.
-        student_id (str): The identifier of the student requesting the exercise.
+        config (RunnableConfig): The runtime configuration.
 
     Returns:
         Optional[Task]: The most relevant exercise if found, otherwise None.
     """
-    rag_store = get_rag_store(tenant_ids)
+    print(f"RUNNABLE CONFIG recommend: {config}")
+
+    tenant_ids = chat_config(config=config).tenant_ids
+    lap_token = chat_config(config=config).lap_token
+    user_id = resolve_runnable_config_param(key="user_id", config=config)
+
+    rag_store = get_rag_store(lap_token=lap_token, tenant_ids=tenant_ids)
     docs = rag_store.similarity_search(query=topic, k=20)
     for doc in docs:
         # Extract the task
         task = json_to_task(json.loads(doc.page_content))
         # Make sure the user does not get a task they already saw.
-        if not history.has_id(student_id, task.id):
-            history.add_id(user_id=student_id, id=task.id)
+        if not history.has_id(user_id, task.id):
+            history.add_id(user_id=user_id, id=task.id)
+            logging.info(f"recommended task: %s", task)
             return task
     return None
 
 
 @tool(parse_docstring=True)
-def get_list_of_topics(topic: Optional[str]) -> list[str]:
+def get_list_of_topics(topic: Optional[str], config: RunnableConfig) -> list[str]:
     """Get a list of topics that the chatbot has exercises for.
 
-    Extracts a list of keywords related to a given topic using an approximate
-    document retrieval method.
+    Extracts a list of keywords related to a given topic using an approximate document retrieval method.
 
     Args:
-        topic (Optional[str]): An optional string representing the topic for which keywords need to be extracted.
+        topic (Optional[str]): The topic the student wants to learn something about.
+        config (RunnableConfig): The runtime configuration.
 
     Returns:
         List[str]: A list of extracted keywords that are most relevant to the topic.
     """
+    tenant_ids = chat_config(config=config).tenant_ids
+    lap_token = chat_config(config=config).lap_token
+    rag_store = get_rag_store(lap_token=lap_token, tenant_ids=tenant_ids)
     if topic:
         # Get a sample of documents
         docs = rag_store.similarity_search(topic, k=20)
@@ -82,7 +93,7 @@ def get_list_of_topics(topic: Optional[str]) -> list[str]:
         tasks = [json_to_task(json.loads(doc.page_content)) for doc in docs]
 
     text_corpus = " ".join([f"{task.title} {task.description}" for task in tasks])
-    if len(tasks) > 0:
+    if len(tasks) > 0 and tasks[0].language:
         language = tasks[0].language.lower()
     else:
         language = "en"
@@ -98,5 +109,5 @@ def json_to_task(task_json) -> Task:
         description=task_json["description"],
         sample_solutions=task_json["sampleSolutions"],
         tenant_id=task_json["tenant"]["id"],
-        language=task_json["language"]
+        language=task_json.get("language")
     )

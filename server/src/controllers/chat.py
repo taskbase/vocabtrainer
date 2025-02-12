@@ -1,11 +1,11 @@
 import httpx
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import Any, List
+from typing import List
 from aitutor.agent import ai_tutor_chat_call as ai_tutor_chat_call
 from app_settings import settings
-from typing import Optional
 from models import Message
+from aitutor.configuration import get_config
 
 router = APIRouter()
 
@@ -19,7 +19,7 @@ class ChatRequest(BaseModel):
     temperature: float
     model: str
     conversationId: str
-    tenantIds: List[int]
+    tenantIds: List[int] = []
 
 
 class ChatDefinition(BaseModel):
@@ -63,11 +63,20 @@ def get_chatbots():
 
 @router.post("/api/chat")
 def chat(request: ChatRequest):
-    if request.chatbotId == grammar_trainer.chatbotId:
-        print(f"conversation id: {request.conversationId}")
-        response = ai_tutor_chat_call(request.messages[-1], request.conversationId, request.tenantIds)
+    config = get_config()
+    print(f"config: {config}\nchatbot id: {request.chatbotId}")
+    # Check if there is a matchin AI Tutor configuration
+    ai_tutor_config = next((chatbot_config for chatbot_config in config.chat_configurations if chatbot_config.id == request.chatbotId), None)
+    print(f"ai_tutor_config: {ai_tutor_config}")
+    if ai_tutor_config:
+        response = ai_tutor_chat_call(
+            request.messages[-1],
+            request.conversationId,
+            ai_tutor_config
+        )
         return {"message": response["response"]}
     else:
+        # Chatbase case
         headers = {"accept": "application/json", "Authorization": f"Bearer {settings.chatbase_api_key}"}
         timeout = httpx.Timeout(60)
         response = httpx.post(url=url + "/chat", headers=headers, json=request.dict(), timeout=timeout)
