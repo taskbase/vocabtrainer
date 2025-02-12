@@ -36,28 +36,24 @@ export class LearnPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
-        this.route.queryParams.subscribe((queryParams) => {
-          console.log('Query Params:', queryParams);
-          this.chatBackendService.getChatbots().subscribe((chatbots: Chatbot[]) => {
-              const chatBot = chatbots.find(chatbot => chatbot.id === params['chatbotId']);
-              this.chat = {
-                messages: chatBot?.initial_messages?.map(message => ({content: message, role: "assistant"})) || [],
-                chatbotId: params['chatbotId'],
-                temperature: 0,
-                model: "gpt-4o-mini",
-                conversationId: new Date().toISOString(),
-                stream: false,
-                tenantIds: queryParams["tenant_id"]
-              };
-              this.chatMessages = chatBot?.initial_messages?.map(message => ({isTaskbase: true, text: message})) || [];
-              this.subscriptions.push(
-                this.chatService.messageEvent.subscribe((text: string) => {
-                  this.handleUserMessage(text);
-                })
-              );
-            }
-          )
-        })
+        this.chatBackendService.getConfig(params['chatbotId']).subscribe((chatBot: Chatbot) => {
+          console.log("chat: " + chatBot)
+          this.chat = {
+            messages: chatBot?.initial_messages?.map(message => ({content: message, role: "assistant"})) || [],
+            chatbotId: params['chatbotId'],
+            temperature: 0,
+            model: "gpt-4o-mini",
+            conversationId: new Date().toISOString(),
+            stream: false,
+          };
+          this.chatMessages = chatBot?.initial_messages?.map(message => ({isTaskbase: true, text: message})) || [];
+          this.subscriptions.push(
+            this.chatService.messageEvent.subscribe((text: string) => {
+              this.handleUserMessage(text);
+            })
+          );
+          }
+        )
       })
     );
   }

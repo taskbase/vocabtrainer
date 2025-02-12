@@ -1,33 +1,19 @@
 import json
-import random
 import logging
+import random
 from typing import Optional
 
 import yake
+from aitutor.configuration import chat_config
 from aitutor.configuration import resolve_runnable_config_param
 from aitutor.models import Task
 from aitutor.rag import get_rag_store
+from cachetools import TTLCache
 from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import tool
-from aitutor.configuration import chat_config
 
-
-class UserTaskHistory:
-    def __init__(self):
-        self.data = {}
-
-    def add_id(self, user_id: str, id: str):
-        """Adds an id to the user's set."""
-        if user_id not in self.data:
-            self.data[user_id] = set()
-        self.data[user_id].add(id)
-
-    def has_id(self, user_id: str, id: str) -> bool:
-        """Checks if a user already has a given id."""
-        return id in self.data.get(user_id, set())
-
-
-history = UserTaskHistory()
+# Create a TTLCache with expiration
+history = TTLCache(maxsize=10000, ttl=24 * 60 * 60)
 
 
 @tool(parse_docstring=True)
@@ -44,8 +30,6 @@ def recommend_exercise_tool(topic: str, config: RunnableConfig) -> Optional[Task
     Returns:
         Optional[Task]: The most relevant exercise if found, otherwise None.
     """
-    print(f"RUNNABLE CONFIG recommend: {config}")
-
     tenant_ids = chat_config(config=config).tenant_ids
     lap_token = chat_config(config=config).lap_token
     user_id = resolve_runnable_config_param(key="user_id", config=config)
@@ -56,11 +40,23 @@ def recommend_exercise_tool(topic: str, config: RunnableConfig) -> Optional[Task
         # Extract the task
         task = json_to_task(json.loads(doc.page_content))
         # Make sure the user does not get a task they already saw.
-        if not history.has_id(user_id, task.id):
-            history.add_id(user_id=user_id, id=task.id)
+        if not _has_solved(user_id, task.id):
+            _add_solved_task(user_id=user_id, task_id=task.id)
             logging.info(f"recommended task: %s", task)
             return task
     return None
+
+
+def _add_solved_task(user_id: int, task_id: str):
+    """Add a task id to the set of solved tasks"""
+    if user_id not in history:
+        history[user_id] = set()  # Initialize set if not present
+    history[user_id].add(task_id)
+
+
+def _has_solved(user_id: int, task_id: str) -> bool:
+    """Check if a user has solved a task."""
+    return task_id in history.get(user_id, set())
 
 
 @tool(parse_docstring=True)

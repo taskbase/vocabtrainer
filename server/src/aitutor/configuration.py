@@ -6,6 +6,7 @@ from aitutor.models import Configuration
 from aitutor.models import ChatConfig
 import boto3
 from langchain_core.runnables import RunnableConfig
+from typing import Optional
 
 s3_client = boto3.client("s3")
 bucket_name = settings.bucket_name
@@ -20,6 +21,13 @@ config: Configuration = None
 def get_config():
     _synchronize_config()
     return config
+
+
+def get_chat_config(chatbot_id: str) -> Optional[ChatConfig]:
+    config = get_config()
+    chat_config = next(
+        (chatbot_config for chatbot_config in config.chat_configurations if chatbot_config.id == chatbot_id), None)
+    return chat_config
 
 
 def _synchronize_config():

@@ -14,6 +14,7 @@ from models import Message
 from pydantic import BaseModel
 from typing_extensions import TypedDict
 from aitutor.models import ChatConfig
+from aitutor.configuration import chat_config
 import logging
 
 # Set logging level
@@ -34,19 +35,11 @@ tools = [get_feedback_tool, recommend_exercise_tool, get_list_of_topics]
 llm = ChatAnthropic(model="claude-3-5-sonnet-20240620")
 llm_with_tools = llm.bind_tools(tools)
 
-system_prompt = (
-    "You are an interactive AI tutor. You ask the student what they want to learn and challenge them with exercises. "
-    "You provide feedback for the student's answers. "
-    "If the student answers incorrectly, offer helpful hints instead of direct answers. "
-    "After any clarification, always return to the exercise to keep the learning experience interactive and engaging. "
-    "Only use the tool for generating exercises. "
-    "Always respond in the same language as the exercises."
-)
-
 
 def chatbot(state: State, config: RunnableConfig):
     if not state["messages"] or not isinstance(state["messages"][0], SystemMessage):
-        state["messages"].insert(0, SystemMessage(content=system_prompt))  # Ensure system message exists
+        # System message must be the first message.
+        state["messages"].insert(0, SystemMessage(content=chat_config(config).system_message))
     return {"messages": [llm_with_tools.invoke(state["messages"], config=config)]}
 
 
@@ -79,7 +72,6 @@ def stream_message(message: str, config: RunnableConfig):
     )
     response_messages = []
     for event in events:
-        logging.info("Event details: %s", event)
         response_messages.append(event["messages"][-1].content)
     return {"response": response_messages[-1] if response_messages else "No response generated."}
 
@@ -87,24 +79,4 @@ def stream_message(message: str, config: RunnableConfig):
 def ai_tutor_chat_call(message: Message, user_id: str, chat_config: ChatConfig):
     warmup_rag_store(lap_token=chat_config.lap_token, tenant_ids=chat_config.tenant_ids)
     config = {"configurable": {"thread_id": user_id, "user_id": user_id, "chat_config": chat_config}}
-    # snapshot = graph.get_state(config)
     return stream_message(message.content, config)
-
-# def input_chat(user_input: str, role: str = "user"):
-#     events = graph.stream(
-#         {"messages": [{"role": role, "content": user_input}]},
-#         config,
-#         stream_mode="values",
-#     )
-#     for event in events:
-#         event["messages"][-1].pretty_print()
-#
-#
-# input_chat("Hallo")
-#
-# while True:
-#     user_input = input("User: ")
-#     if user_input.lower() in ["quit", "exit", "q"]:
-#         print("Goodbye!")
-#         break
-#     input_chat(user_input)

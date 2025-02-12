@@ -24,6 +24,12 @@ class Feedback(BaseModel):
     criteria: list[Criteria]
 
 
+class PublicChatConfig(BaseModel):
+    id: str
+    name: str
+    initial_messages: list[str]
+
+
 class ChatConfig(BaseModel):
     id: str
     name: str
@@ -31,6 +37,13 @@ class ChatConfig(BaseModel):
     lap_token: str
     system_message: str
     initial_messages: list[str]
+
+    def to_public(self) -> PublicChatConfig:
+        return PublicChatConfig(
+            id=self.id,
+            name=self.name,
+            initial_messages=self.initial_messages
+        )
 
 
 class Configuration(BaseModel):

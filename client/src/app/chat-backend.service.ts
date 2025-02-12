@@ -24,4 +24,10 @@ export class ChatBackendService {
       `${this.endpoint}/chat`, chat
     );
   }
+
+  getConfig(chatBotId: string): Observable<Chatbot> {
+    return this.http.get<Chatbot>(
+      `${this.endpoint}/chat-config/` + chatBotId
+    )
+  }
 }
